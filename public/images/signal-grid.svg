@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Signal grid</title>
+  <desc id="desc">An abstract cyan and magenta signal moving across a dark technical grid.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#090b10"/>
+      <stop offset="1" stop-color="#121821"/>
+    </linearGradient>
+    <linearGradient id="signal" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#72edf8"/>
+      <stop offset=".52" stop-color="#4bd8e8"/>
+      <stop offset="1" stop-color="#ff64b1"/>
+    </linearGradient>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0H0v60" fill="none" stroke="#edf1f7" stroke-opacity=".08"/>
+    </pattern>
+    <filter id="glow" x="-30%" y="-100%" width="160%" height="300%">
+      <feGaussianBlur stdDeviation="14" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <path d="M0 350h105l54-118 80 251 91-326 81 296 77-193 73 177 83-245 75 279 73-160 66 107 69-211 81 286 69-145 103 92h100" fill="none" stroke="url(#signal)" stroke-linecap="round" stroke-linejoin="round" stroke-width="8" filter="url(#glow)"/>
+  <circle cx="159" cy="232" r="9" fill="#72edf8"/>
+  <circle cx="644" cy="192" r="9" fill="#ff64b1"/>
+  <text x="72" y="90" fill="#edf1f7" font-family="monospace" font-size="24" letter-spacing="6" opacity=".7">OPEN FREQUENCY / JV</text>
+</svg>

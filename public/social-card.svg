@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">John Vicondoa</title>
+  <desc id="desc">All the things I always wanted to write, but didn't have time to check.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#090b10"/>
+      <stop offset="1" stop-color="#121821"/>
+    </linearGradient>
+    <linearGradient id="signal" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#72edf8"/>
+      <stop offset="1" stop-color="#ff64b1"/>
+    </linearGradient>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0v64" fill="none" stroke="#edf1f7" stroke-opacity=".055"/>
+    </pattern>
+    <filter id="glow" x="-40%" y="-100%" width="180%" height="300%">
+      <feGaussianBlur stdDeviation="18" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#background)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <circle cx="995" cy="150" r="210" fill="#4bd8e8" opacity=".07"/>
+  <circle cx="1010" cy="160" r="105" fill="none" stroke="url(#signal)" stroke-width="3"/>
+  <circle cx="1010" cy="160" r="148" fill="none" stroke="#edf1f7" stroke-opacity=".14" stroke-width="2"/>
+  <path d="M0 518h118l41-72 53 135 61-202 60 185 48-118 45 92 55-166 58 188 53-112 58 81 50-151 59 183 58-110 65 97 56-137 61 180 57-85 59 80h104" fill="none" stroke="url(#signal)" stroke-linecap="round" stroke-linejoin="round" stroke-width="7" filter="url(#glow)"/>
+  <text x="78" y="102" fill="#72edf8" font-family="monospace" font-size="20" font-weight="700" letter-spacing="5">PERSONAL LOG / OPEN FREQUENCY</text>
+  <text x="78" y="246" fill="#edf1f7" font-family="sans-serif" font-size="82" font-weight="700" letter-spacing="-3">John Vicondoa</text>
+  <text x="82" y="316" fill="#9ba4b3" font-family="sans-serif" font-size="30">All the things I always wanted to write,</text>
+  <text x="82" y="359" fill="#9ba4b3" font-family="sans-serif" font-size="30">but didn't have time to check.</text>
+  <text x="82" y="565" fill="#edf1f7" font-family="monospace" font-size="22" letter-spacing="3">VICONDOA.COM</text>
+</svg>

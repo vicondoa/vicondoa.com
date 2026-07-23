@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../site.config';
+---
+
+<BaseLayout
+  title="About"
+  description="About John Vicondoa and the ideas behind vicondoa.com."
+>
+  <section class="page-heading section-shell">
+    <p class="eyebrow">About / the person behind the signal</p>
+    <h1>Hi, I'm John.</h1>
+    <p>{SITE.tagline}</p>
+  </section>
+
+  <section class="section-shell about-layout">
+    <div class="prose">
+      <p class="lede">
+        This is my place to follow curiosity without forcing it into a single
+        lane.
+      </p>
+      <p>
+        I write about programming and technology, being a father,
+        neurodiversity, electronic music, local history, and whatever else keeps
+        asking for a closer look. Some posts will be practical. Some will be
+        personal. Some will probably connect subjects that do not appear
+        connected at first.
+      </p>
+      <p>
+        The site is deliberately simple: static pages, words first, and just
+        enough neon to keep the frequency visible.
+      </p>
+      <h2>Elsewhere</h2>
+      <p>
+        My projects and code live on
+        <a href={SITE.githubUrl} target="_blank" rel="me noopener noreferrer">
+          GitHub <span class="sr-only">(opens in a new tab)</span>
+        </a>.
+      </p>
+      <h2>Privacy</h2>
+      <p>
+        This site uses Cloudflare Web Analytics for aggregate traffic and
+        performance measurements. It does not use analytics cookies or track
+        visitors across sites.
+      </p>
+    </div>
+    <aside class="about-panel">
+      <span class="about-panel__mark" aria-hidden="true">JV</span>
+      <p>Writing from the intersection of systems, sound, place, and people.</p>
+    </aside>
+  </section>
+</BaseLayout>

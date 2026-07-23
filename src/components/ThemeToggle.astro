@@ -1,0 +1,74 @@
+<button
+  class="theme-toggle"
+  type="button"
+  data-theme-toggle
+  aria-label="Switch color theme"
+  aria-pressed="false"
+>
+  <svg class="theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      d="M20.2 15.2A8.5 8.5 0 0 1 8.8 3.8 8.5 8.5 0 1 0 20.2 15.2Z"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="1.8"></path>
+  </svg>
+  <svg class="theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true">
+    <circle
+      cx="12"
+      cy="12"
+      r="3.6"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+    >
+    </circle>
+    <path
+      d="M12 2v2.1M12 19.9V22M4.9 4.9l1.5 1.5M17.6 17.6l1.5 1.5M2 12h2.1M19.9 12H22M4.9 19.1l1.5-1.5M17.6 6.4l1.5-1.5"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-width="1.8"></path>
+  </svg>
+</button>
+
+<script>
+  const storageKey = 'vicondoa-theme';
+  const buttons = document.querySelectorAll<HTMLButtonElement>(
+    '[data-theme-toggle]',
+  );
+
+  function currentTheme(): 'dark' | 'light' {
+    return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+  }
+
+  function syncButtons(theme: 'dark' | 'light') {
+    for (const button of buttons) {
+      const nextTheme = theme === 'dark' ? 'light' : 'dark';
+      button.setAttribute('aria-label', `Switch to ${nextTheme} theme`);
+      button.setAttribute('aria-pressed', String(theme === 'dark'));
+    }
+  }
+
+  function applyTheme(theme: 'dark' | 'light') {
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+    syncButtons(theme);
+  }
+
+  syncButtons(currentTheme());
+
+  for (const button of buttons) {
+    button.addEventListener('click', () => {
+      const theme = currentTheme() === 'dark' ? 'light' : 'dark';
+      applyTheme(theme);
+
+      try {
+        window.localStorage.setItem(storageKey, theme);
+      } catch (error) {
+        console.warn('Theme preference could not be saved.', error);
+      }
+    });
+  }
+</script>

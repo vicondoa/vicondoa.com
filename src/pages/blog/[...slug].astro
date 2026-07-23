@@ -1,0 +1,122 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+
+import FormattedDate from '../../components/FormattedDate.astro';
+import {
+  getPostSlug,
+  getPostUrl,
+  getPublishedPosts,
+  getReadingTime,
+  slugifyTopic,
+  type BlogPost,
+} from '../../lib/blog';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+interface Props {
+  post: BlogPost;
+}
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+
+  return posts.map((post) => ({
+    params: { slug: getPostSlug(post) },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const posts = await getPublishedPosts();
+const postIndex = posts.findIndex((candidate) => candidate.id === post.id);
+const newerPost = postIndex > 0 ? posts[postIndex - 1] : undefined;
+const olderPost =
+  postIndex >= 0 && postIndex < posts.length - 1
+    ? posts[postIndex + 1]
+    : undefined;
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  canonical={post.data.canonical}
+  article={{
+    publishedAt: post.data.publishedAt,
+    updatedAt: post.data.updatedAt,
+    topics: post.data.topics,
+  }}
+>
+  <article class="post-shell">
+    <header class="post-header">
+      <p class="eyebrow">Field note / {post.data.topics[0]}</p>
+      <h1>{post.data.title}</h1>
+      <p class="post-header__description">{post.data.description}</p>
+      <div class="post-header__meta">
+        <FormattedDate date={post.data.publishedAt} />
+        <span aria-hidden="true">/</span>
+        <span>{getReadingTime(post)} min read</span>
+        {
+          post.data.updatedAt && (
+            <>
+              <span aria-hidden="true">/</span>
+              <span>
+                Updated <FormattedDate date={post.data.updatedAt} />
+              </span>
+            </>
+          )
+        }
+      </div>
+      <ul class="topic-list" aria-label="Topics">
+        {
+          post.data.topics.map((topic) => (
+            <li>
+              <a class="topic-pill" href={`/topics/${slugifyTopic(topic)}`}>
+                {topic}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </header>
+
+    {
+      post.data.cover && post.data.coverAlt && (
+        <Image
+          class="post-cover"
+          src={post.data.cover}
+          alt={post.data.coverAlt}
+          widths={[640, 960, 1280]}
+          sizes="(max-width: 800px) 100vw, 800px"
+        />
+      )
+    }
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    {
+      (olderPost || newerPost) && (
+        <nav class="post-navigation" aria-label="More posts">
+          {olderPost ? (
+            <a href={getPostUrl(olderPost)}>
+              <span>Older post</span>
+              <strong>{olderPost.data.title}</strong>
+            </a>
+          ) : (
+            <span />
+          )}
+          {newerPost ? (
+            <a href={getPostUrl(newerPost)}>
+              <span>Newer post</span>
+              <strong>{newerPost.data.title}</strong>
+            </a>
+          ) : (
+            <span />
+          )}
+        </nav>
+      )
+    }
+  </article>
+</BaseLayout>

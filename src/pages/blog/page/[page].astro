@@ -1,0 +1,41 @@
+---
+import BlogIndexPage from '../../../components/BlogIndexPage.astro';
+import {
+  getPageCount,
+  getPostsPage,
+  getPublishedPosts,
+  type BlogPost,
+} from '../../../lib/blog';
+
+interface Props {
+  currentPage: number;
+  posts: BlogPost[];
+  totalPages: number;
+}
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  const totalPages = getPageCount(posts.length);
+
+  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => {
+    const currentPage = index + 2;
+
+    return {
+      params: { page: String(currentPage) },
+      props: {
+        currentPage,
+        posts: getPostsPage(posts, currentPage),
+        totalPages,
+      },
+    };
+  });
+}
+
+const { currentPage, posts, totalPages } = Astro.props;
+---
+
+<BlogIndexPage
+  currentPage={currentPage}
+  posts={posts}
+  totalPages={totalPages}
+/>

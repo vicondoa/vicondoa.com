@@ -1,0 +1,49 @@
+---
+import type { BlogPost } from '../lib/blog';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Pagination from './Pagination.astro';
+import PostCard from './PostCard.astro';
+
+interface Props {
+  currentPage: number;
+  posts: BlogPost[];
+  totalPages: number;
+}
+
+const { currentPage, posts, totalPages } = Astro.props;
+const title = currentPage === 1 ? 'Blog' : `Blog — Page ${currentPage}`;
+---
+
+<BaseLayout
+  title={title}
+  description="Essays, experiments, histories, and notes from John Vicondoa."
+>
+  <section class="page-heading section-shell">
+    <p class="eyebrow">Writing / transmissions</p>
+    <h1>Blog</h1>
+    <p>
+      Essays, experiments, histories, and notes—organized mostly by curiosity.
+    </p>
+  </section>
+
+  <section class="section-shell" aria-label="Posts">
+    {
+      posts.length > 0 ? (
+        <div class="post-list">
+          {posts.map((post) => (
+            <PostCard post={post} />
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state">
+          <p>The first signal is still being tuned. Check back soon.</p>
+        </div>
+      )
+    }
+    <Pagination
+      basePath="/blog"
+      currentPage={currentPage}
+      totalPages={totalPages}
+    />
+  </section>
+</BaseLayout>

@@ -1,0 +1,59 @@
+---
+title: 'Start here: tune this into your first post'
+description: 'A starter post showing the prose, code, images, topics, and MDX components available on vicondoa.com.'
+publishedAt: 2026-07-23
+topics:
+  - Programming
+  - Meta
+draft: false
+---
+
+import SignalNote from '../../components/SignalNote.astro';
+
+This is a **starter post**, not a finished essay. Rewrite it into your first
+piece, change the frontmatter above, and use the examples below as a quick
+reference for how the site handles long-form content.
+
+<SignalNote>
+  MDX lets a post stay mostly Markdown while making room for a useful custom
+  component when plain prose is not enough.
+</SignalNote>
+
+## Write like a document, not a template
+
+Regular Markdown covers most of what a post needs: headings, links, emphasis,
+lists, quotes, images, and code. The site supplies the typography and spacing.
+
+> A good personal site is less about having a content strategy and more about
+> making a reliable place for unfinished curiosity.
+
+For example, a technical post can include highlighted code:
+
+```typescript
+type Signal = {
+  source: string;
+  frequency: number;
+};
+
+export function tune(signal: Signal): string {
+  return `${signal.source} @ ${signal.frequency} Hz`;
+}
+```
+
+## Images keep their context
+
+Add useful alternative text that explains what the image contributes. Keep
+post-specific images close to the post when they need Astro optimization, or
+place simple shared assets in `public/images`.
+
+![An abstract cyan and magenta signal moving across a technical grid.](/images/signal-grid.svg)
+
+## Topics create their own archive
+
+The `topics` list in frontmatter powers the topic pages automatically. Use the
+same spelling for recurring subjects, keep the list focused, and let the
+taxonomy grow from real posts rather than creating empty categories in
+advance.
+
+When this reference has done its job, replace the title, summary, date, topics,
+and body with something only you could write.

@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Page not found"
+  description="The requested page could not be found."
+  noindex
+>
+  <section class="not-found section-shell">
+    <p class="not-found__code" aria-hidden="true">404</p>
+    <p class="eyebrow">Signal lost</p>
+    <h1>Nothing on this frequency.</h1>
+    <p>The page may have moved, or the address may be out of tune.</p>
+    <a class="button-link" href="/blog">Return to the blog</a>
+  </section>
+</BaseLayout>

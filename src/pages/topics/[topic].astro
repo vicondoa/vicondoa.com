@@ -1,0 +1,40 @@
+---
+import PostCard from '../../components/PostCard.astro';
+import { getPublishedPosts, getTopics, type Topic } from '../../lib/blog';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+interface Props {
+  topic: Topic;
+}
+
+export async function getStaticPaths() {
+  const topics = getTopics(await getPublishedPosts());
+
+  return topics.map((topic) => ({
+    params: { topic: topic.slug },
+    props: { topic },
+  }));
+}
+
+const { topic } = Astro.props;
+---
+
+<BaseLayout
+  title={topic.label}
+  description={`Writing by John Vicondoa about ${topic.label}.`}
+>
+  <section class="page-heading section-shell">
+    <p class="eyebrow">
+      Topic / {topic.count}
+      {topic.count === 1 ? 'post' : 'posts'}
+    </p>
+    <h1>{topic.label}</h1>
+    <p>Everything filed under this particular frequency.</p>
+  </section>
+
+  <section class="section-shell" aria-label={`Posts about ${topic.label}`}>
+    <div class="post-list">
+      {topic.posts.map((post) => <PostCard post={post} />)}
+    </div>
+  </section>
+</BaseLayout>

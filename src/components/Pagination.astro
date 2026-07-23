@@ -1,0 +1,37 @@
+---
+interface Props {
+  basePath: string;
+  currentPage: number;
+  totalPages: number;
+}
+
+const { basePath, currentPage, totalPages } = Astro.props;
+const pageUrl = (page: number) =>
+  page === 1 ? basePath : `${basePath}/page/${page}`;
+const previousUrl = currentPage > 1 ? pageUrl(currentPage - 1) : undefined;
+const nextUrl = currentPage < totalPages ? pageUrl(currentPage + 1) : undefined;
+---
+
+{
+  totalPages > 1 && (
+    <nav class="pagination" aria-label="Blog pagination">
+      {previousUrl ? (
+        <a class="button-link button-link--quiet" href={previousUrl} rel="prev">
+          <span aria-hidden="true">←</span> Newer posts
+        </a>
+      ) : (
+        <span />
+      )}
+      <span class="pagination__status">
+        Page {currentPage} of {totalPages}
+      </span>
+      {nextUrl ? (
+        <a class="button-link button-link--quiet" href={nextUrl} rel="next">
+          Older posts <span aria-hidden="true">→</span>
+        </a>
+      ) : (
+        <span />
+      )}
+    </nav>
+  )
+}

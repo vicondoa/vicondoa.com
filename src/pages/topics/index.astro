@@ -1,0 +1,41 @@
+---
+import { getPublishedPosts, getTopics } from '../../lib/blog';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const topics = getTopics(await getPublishedPosts());
+---
+
+<BaseLayout
+  title="Topics"
+  description="Browse John Vicondoa's writing by topic."
+>
+  <section class="page-heading section-shell">
+    <p class="eyebrow">Index / frequencies</p>
+    <h1>Topics</h1>
+    <p>
+      The recurring threads. They overlap, drift, and change as the writing
+      does.
+    </p>
+  </section>
+
+  <section class="section-shell" aria-label="All topics">
+    {
+      topics.length > 0 ? (
+        <div class="topic-grid">
+          {topics.map((topic) => (
+            <a class="topic-card" href={`/topics/${topic.slug}`}>
+              <span>{topic.label}</span>
+              <span class="topic-card__count">
+                {topic.count} {topic.count === 1 ? 'post' : 'posts'}
+              </span>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state">
+          <p>Topics will appear here with the first published post.</p>
+        </div>
+      )
+    }
+  </section>
+</BaseLayout>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="JV signal mark">
+  <defs>
+    <linearGradient id="signal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4bd8e8"/>
+      <stop offset="1" stop-color="#ff64b1"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="#090b10"/>
+  <circle cx="64" cy="64" r="39" fill="none" stroke="url(#signal)" stroke-width="4"/>
+  <circle cx="64" cy="64" r="48" fill="none" stroke="#edf1f7" stroke-opacity=".2" stroke-width="2"/>
+  <path d="M10 68h25l8-21 13 38 12-46 12 42 9-25 10 12h19" fill="none" stroke="url(#signal)" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+  <text x="64" y="73" fill="#edf1f7" font-family="system-ui,sans-serif" font-size="24" font-weight="700" text-anchor="middle">JV</text>
+</svg>
