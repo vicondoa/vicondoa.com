@@ -5,6 +5,7 @@ on:
     branches:
       - main
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -16,6 +17,7 @@ concurrency:
 jobs:
   validate:
     name: Validate static site
+    if: github.actor == github.repository_owner
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:

@@ -84,7 +84,9 @@ images, topics, and an MDX component. Replace it with the first real post.
 ## Publishing
 
 GitHub Actions runs formatting, Astro/content checks, a production build, and
-browser smoke/accessibility tests on pull requests and `main`.
+browser smoke/accessibility tests on pull requests and `main`. CI jobs are
+restricted to runs initiated by the repository owner; outside fork pull
+requests cannot execute repository workflows.
 
 Cloudflare Pages uses direct Git integration:
 
@@ -120,6 +122,10 @@ gh repo create vicondoa/vicondoa.com --public --source=. --remote=origin --push
 Creating the repository and authorizing Cloudflare's GitHub integration require
 authenticated GitHub and Cloudflare sessions. Never commit access tokens or
 Cloudflare account identifiers.
+
+This is a public source repository but is not open for external contributions.
+GitHub does not support disabling fork pull requests on public repositories;
+outside pull requests cannot run CI and will not be merged.
 
 ## Licensing
 
