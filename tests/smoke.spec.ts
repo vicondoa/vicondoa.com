@@ -39,11 +39,16 @@ test('site navigation and GitHub profile links are present', async ({
   await expect(
     page.getByRole('navigation', { name: 'Primary navigation' }),
   ).toBeVisible();
-  await expect(
-    page.getByRole('heading', { name: 'Writing', exact: true }),
-  ).toBeVisible();
+  await expect(page.locator('h1')).toHaveText("John Vicondoa's blog");
+  await expect(page.getByText('Writing', { exact: true })).toHaveCount(0);
   await expect(page.locator(`a[href="${githubUrl}"]`)).toHaveCount(2);
-  await expect(page.getByText('John Vicondoa', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('John Vicondoa', { exact: true })).toHaveCount(1);
+  await expect(
+    page.getByText(
+      'Tech, AI, and special interests—straight from the underground (basement).',
+      { exact: true },
+    ),
+  ).toHaveCount(1);
 
   await page
     .getByRole('link', { name: 'About me', exact: true })
@@ -56,9 +61,7 @@ test('site navigation and GitHub profile links are present', async ({
 test('legacy blog index redirects to the landing page', async ({ page }) => {
   await page.goto('/blog');
   await expect(page).toHaveURL('/');
-  await expect(
-    page.getByRole('heading', { name: 'Writing', exact: true }),
-  ).toBeVisible();
+  await expect(page.locator('h1')).toHaveText("John Vicondoa's blog");
 });
 
 test.describe('theme preference', () => {

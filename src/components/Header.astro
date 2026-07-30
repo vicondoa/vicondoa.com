@@ -8,15 +8,9 @@ const isAbout = pathname === '/about';
 
 <header class="site-header">
   <div class="site-header__inner">
-    <a class="brand-mark" href="/" aria-label="Blog">
-      <svg viewBox="0 0 32 32" aria-hidden="true">
-        <path
-          d="M6 7h4v4H6zM14 7h4v4h-4zM22 7h4v4h-4zM6 14h4v4H6zM14 14h4v4h-4zM22 14h4v4h-4zM6 21h4v4H6zM14 21h4v4h-4zM22 21h4v4h-4z"
-        ></path>
-        <path
-          class="brand-mark__accent"
-          d="M14 7h4v4h-4zM22 14h4v4h-4zM6 21h4v4H6z"></path>
-      </svg>
+    <a class="site-identity" href="/" aria-label={`${SITE.author}, blog`}>
+      <span class="site-identity__name">{SITE.author}</span>
+      <span class="site-identity__tagline">{SITE.tagline}</span>
     </a>
 
     <div class="site-header__actions">

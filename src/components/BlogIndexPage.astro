@@ -15,7 +15,7 @@ interface Props {
 
 const { basePath, currentPage, posts, totalPages } = Astro.props;
 const isFirstPage = currentPage === 1;
-const title = isFirstPage ? SITE.title : `Writing — Page ${currentPage}`;
+const title = isFirstPage ? SITE.title : `Archive — Page ${currentPage}`;
 ---
 
 <BaseLayout
@@ -26,14 +26,11 @@ const title = isFirstPage ? SITE.title : `Writing — Page ${currentPage}`;
     isFirstPage ? (
       <section class="blog-hero">
         <MatrixBackdrop />
-        <div class="blog-hero__content section-shell">
-          <h1>Writing</h1>
-          <p>{SITE.tagline}</p>
-        </div>
+        <h1 class="sr-only">John Vicondoa's blog</h1>
       </section>
     ) : (
       <section class="page-heading section-shell">
-        <h1>Writing</h1>
+        <h1>Archive</h1>
         <p>Page {currentPage} of the archive.</p>
       </section>
     )

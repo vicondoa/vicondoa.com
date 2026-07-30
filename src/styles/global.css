@@ -22,7 +22,7 @@
   --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
   --content-width: 46rem;
   --wide-width: 72rem;
-  --header-height: 4.75rem;
+  --header-height: 6.25rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -219,34 +219,38 @@ p {
   min-height: var(--header-height);
   align-items: center;
   gap: 1rem;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: minmax(0, 1fr) auto;
 }
 
-.brand-mark {
-  display: grid;
-  width: 2.4rem;
-  height: 2.4rem;
-  place-items: center;
-  border: 1px solid transparent;
-  border-radius: 0.4rem;
-  color: var(--cyan);
+.site-identity {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  flex-direction: column;
+  color: var(--text);
+  line-height: 1.25;
   text-decoration: none;
 }
 
-.brand-mark:hover {
-  border-color: var(--border);
-  background: var(--surface);
-  color: var(--cyan);
+.site-identity:hover {
+  color: var(--text);
 }
 
-.brand-mark svg {
-  width: 1.5rem;
-  height: 1.5rem;
-  fill: currentColor;
+.site-identity__name {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 720;
+  letter-spacing: -0.025em;
 }
 
-.brand-mark__accent {
-  fill: var(--magenta);
+.site-identity__tagline {
+  max-width: 34rem;
+  margin-top: 0.24rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.015em;
+  line-height: 1.4;
 }
 
 .site-nav {
@@ -336,16 +340,9 @@ p {
 .site-footer__inner {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 2rem;
   padding-block: 2.5rem;
-}
-
-.site-footer__tagline {
-  max-width: 35rem;
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 0.9rem;
 }
 
 .site-footer__meta {
@@ -566,17 +563,14 @@ p {
 
 .blog-hero {
   position: relative;
-  min-height: clamp(20rem, 44vw, 30rem);
+  min-height: clamp(26rem, 50vw, 36rem);
   overflow: hidden;
   border-bottom: 1px solid var(--border);
-  background:
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--bg) 92%, transparent) 0%,
-      color-mix(in srgb, var(--bg) 68%, transparent) 42%,
-      color-mix(in srgb, var(--bg) 30%, transparent) 100%
-    ),
-    radial-gradient(circle at 68% 45%, var(--glow), transparent 32rem);
+  background: radial-gradient(
+    circle at 52% 42%,
+    var(--glow),
+    transparent 36rem
+  );
 }
 
 .blog-hero::after {
@@ -584,47 +578,20 @@ p {
   inset: 0;
   background: linear-gradient(
     to bottom,
-    transparent 46%,
-    color-mix(in srgb, var(--bg) 84%, transparent) 84%,
+    transparent 52%,
+    color-mix(in srgb, var(--bg) 74%, transparent) 82%,
     var(--bg)
   );
   content: '';
   pointer-events: none;
 }
 
-.blog-hero__content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  min-height: inherit;
-  flex-direction: column;
-  justify-content: center;
-  padding-block: clamp(4rem, 9vw, 7rem);
-}
-
-.blog-hero h1 {
-  max-width: 38rem;
-  margin-bottom: 0.25em;
-  font-size: clamp(3rem, 8vw, 5.6rem);
-}
-
-.blog-hero__content > p {
-  max-width: 35rem;
-  margin: 0;
-  color: var(--text-muted);
-  font-family: var(--font-display);
-  font-size: clamp(1.1rem, 2.4vw, 1.55rem);
-  letter-spacing: -0.015em;
-  line-height: 1.45;
-  text-wrap: balance;
-}
-
 .matrix-backdrop {
   position: absolute;
   z-index: 1;
-  inset: -2rem -4rem -1rem 16%;
+  inset: -2rem -2rem -1rem;
   color: var(--text-muted);
-  opacity: 0.58;
+  opacity: 0.76;
   pointer-events: none;
 }
 
@@ -636,15 +603,22 @@ p {
 .matrix-backdrop__grid {
   fill: none;
   stroke: var(--grid);
-  stroke-width: 1;
+  stroke-width: 0.8;
 }
 
-.matrix-backdrop__bits {
-  fill: var(--text-muted);
+.matrix-backdrop__column {
+  fill: var(--cyan);
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.45em;
-  opacity: 0.24;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  opacity: 0.52;
+  filter: drop-shadow(0 0 0.2rem var(--glow));
+}
+
+.matrix-backdrop__column--accent {
+  fill: var(--magenta);
+  opacity: 0.7;
 }
 
 .blog-listing {
@@ -932,12 +906,17 @@ p {
   }
 
   .site-header__inner {
-    padding-block: 0.85rem;
-    grid-template-columns: auto 1fr;
+    padding-block: 1rem;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
   .site-header__actions {
     gap: 0.15rem;
+  }
+
+  .site-identity__tagline {
+    max-width: 13rem;
+    font-size: 0.62rem;
   }
 
   .site-footer__inner {
@@ -960,8 +939,8 @@ p {
   }
 
   .matrix-backdrop {
-    inset-inline: -14rem -7rem;
-    opacity: 0.46;
+    inset-inline: -24rem -18rem;
+    opacity: 0.68;
   }
 
   .topic-grid,
