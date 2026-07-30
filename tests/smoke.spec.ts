@@ -11,7 +11,6 @@ test('core routes render and expose discovery files', async ({
 }) => {
   const routes = [
     '/',
-    '/blog',
     '/blog/start-here',
     '/topics',
     '/topics/programming',
@@ -40,11 +39,26 @@ test('site navigation and GitHub profile links are present', async ({
   await expect(
     page.getByRole('navigation', { name: 'Primary navigation' }),
   ).toBeVisible();
-  await expect(page.locator(`a[href="${githubUrl}"]`)).toHaveCount(3);
+  await expect(
+    page.getByRole('heading', { name: 'Writing', exact: true }),
+  ).toBeVisible();
+  await expect(page.locator(`a[href="${githubUrl}"]`)).toHaveCount(2);
+  await expect(page.getByText('John Vicondoa', { exact: true })).toHaveCount(0);
 
-  await page.getByRole('link', { name: 'About', exact: true }).click();
+  await page
+    .getByRole('link', { name: 'About me', exact: true })
+    .first()
+    .click();
   await expect(page).toHaveURL(/\/about$/);
   await expect(page.locator(`a[href="${githubUrl}"]`)).toHaveCount(3);
+});
+
+test('legacy blog index redirects to the landing page', async ({ page }) => {
+  await page.goto('/blog');
+  await expect(page).toHaveURL('/');
+  await expect(
+    page.getByRole('heading', { name: 'Writing', exact: true }),
+  ).toBeVisible();
 });
 
 test.describe('theme preference', () => {

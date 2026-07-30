@@ -7,7 +7,7 @@ interface Props {
 
 const { basePath, currentPage, totalPages } = Astro.props;
 const pageUrl = (page: number) =>
-  page === 1 ? basePath : `${basePath}/page/${page}`;
+  page === 1 ? basePath : `${basePath === '/' ? '' : basePath}/page/${page}`;
 const previousUrl = currentPage > 1 ? pageUrl(currentPage - 1) : undefined;
 const nextUrl = currentPage < totalPages ? pageUrl(currentPage + 1) : undefined;
 ---

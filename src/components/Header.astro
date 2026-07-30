@@ -3,37 +3,27 @@ import { SITE } from '../site.config';
 import ThemeToggle from './ThemeToggle.astro';
 
 const pathname = Astro.url.pathname;
-const navigation = [
-  { href: '/', label: 'Home' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/topics', label: 'Topics' },
-  { href: '/about', label: 'About' },
-];
-
-const isActive = (href: string) =>
-  href === '/'
-    ? pathname === href
-    : pathname === href || pathname.startsWith(`${href}/`);
+const isAbout = pathname === '/about';
 ---
 
 <header class="site-header">
   <div class="site-header__inner">
-    <a class="wordmark" href="/" aria-label={`${SITE.title}, home`}>
-      <span class="wordmark__signal" aria-hidden="true"></span>
-      <span>{SITE.title}</span>
+    <a class="brand-mark" href="/" aria-label="Blog">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <path
+          d="M6 7h4v4H6zM14 7h4v4h-4zM22 7h4v4h-4zM6 14h4v4H6zM14 14h4v4h-4zM22 14h4v4h-4zM6 21h4v4H6zM14 21h4v4h-4zM22 21h4v4h-4z"
+        ></path>
+        <path
+          class="brand-mark__accent"
+          d="M14 7h4v4h-4zM22 14h4v4h-4zM6 21h4v4H6z"></path>
+      </svg>
     </a>
 
-    <nav class="site-nav" aria-label="Primary navigation">
-      {
-        navigation.map(({ href, label }) => (
-          <a href={href} aria-current={isActive(href) ? 'page' : undefined}>
-            {label}
-          </a>
-        ))
-      }
-    </nav>
-
     <div class="site-header__actions">
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="/about" aria-current={isAbout ? 'page' : undefined}>About me</a
+        >
+      </nav>
       <a
         class="icon-link"
         href={SITE.githubUrl}
