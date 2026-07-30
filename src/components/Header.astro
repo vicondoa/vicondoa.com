@@ -1,5 +1,6 @@
 ---
 import { SITE } from '../site.config';
+import MatrixBackdrop from './MatrixBackdrop.astro';
 import ThemeToggle from './ThemeToggle.astro';
 
 const pathname = Astro.url.pathname;
@@ -7,6 +8,7 @@ const isAbout = pathname === '/about';
 ---
 
 <header class="site-header">
+  <MatrixBackdrop />
   <div class="site-header__inner">
     <a class="site-identity" href="/" aria-label={`${SITE.author}, blog`}>
       <span class="site-identity__name">{SITE.author}</span>
