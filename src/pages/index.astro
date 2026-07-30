@@ -1,107 +1,15 @@
 ---
-import PostCard from '../components/PostCard.astro';
-import { getPublishedPosts, getTopics } from '../lib/blog';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { SITE } from '../site.config';
+import BlogIndexPage from '../components/BlogIndexPage.astro';
+import { getPageCount, getPostsPage, getPublishedPosts } from '../lib/blog';
 
 const posts = await getPublishedPosts();
-const recentPosts = posts.slice(0, 3);
-const topics = getTopics(posts).slice(0, 8);
+const totalPages = getPageCount(posts.length);
+const pagePosts = getPostsPage(posts, 1);
 ---
 
-<BaseLayout title={SITE.title}>
-  <section class="hero section-shell">
-    <div class="hero__copy">
-      <p class="eyebrow">Personal log / open frequency</p>
-      <h1>{SITE.author}</h1>
-      <p class="hero__tagline">{SITE.tagline}</p>
-      <div class="hero__actions">
-        <a class="button-link" href="/blog">Read the blog</a>
-        <a class="text-link" href="/about"
-          >What this is about <span aria-hidden="true">→</span></a
-        >
-      </div>
-    </div>
-    <div class="signal-visual" aria-hidden="true">
-      <span class="signal-visual__ring signal-visual__ring--one"></span>
-      <span class="signal-visual__ring signal-visual__ring--two"></span>
-      <span class="signal-visual__ring signal-visual__ring--three"></span>
-      <span class="signal-visual__core">JV</span>
-      <span class="signal-visual__axis"></span>
-    </div>
-  </section>
-
-  <section class="section-shell home-section">
-    <div class="section-heading">
-      <div>
-        <p class="eyebrow">Latest transmissions</p>
-        <h2>Recent writing</h2>
-      </div>
-      <a class="text-link" href="/blog"
-        >All posts <span aria-hidden="true">→</span></a
-      >
-    </div>
-    {
-      recentPosts.length > 0 ? (
-        <div class="post-list">
-          {recentPosts.map((post) => (
-            <PostCard post={post} />
-          ))}
-        </div>
-      ) : (
-        <div class="empty-state">
-          <p>The first signal is still being tuned. Check back soon.</p>
-        </div>
-      )
-    }
-  </section>
-
-  {
-    topics.length > 0 && (
-      <section class="section-shell home-section">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Follow a thread</p>
-            <h2>Topics</h2>
-          </div>
-          <a class="text-link" href="/topics">
-            Browse all <span aria-hidden="true">→</span>
-          </a>
-        </div>
-        <div class="topic-grid">
-          {topics.map((topic) => (
-            <a class="topic-card" href={`/topics/${topic.slug}`}>
-              <span>{topic.label}</span>
-              <span class="topic-card__count">
-                {topic.count} {topic.count === 1 ? 'post' : 'posts'}
-              </span>
-            </a>
-          ))}
-        </div>
-      </section>
-    )
-  }
-
-  <section class="section-shell home-section">
-    <div class="about-callout">
-      <div>
-        <p class="eyebrow">Source / process</p>
-        <h2>Curiosity, loosely organized.</h2>
-        <p>
-          This is where I make room for technology, fatherhood, electronic
-          music, local history, neurodiversity, and the ideas that refuse to
-          stay in one category.
-        </p>
-      </div>
-      <a
-        class="button-link button-link--quiet"
-        href={SITE.githubUrl}
-        target="_blank"
-        rel="me noopener noreferrer"
-      >
-        Find me on GitHub <span aria-hidden="true">↗</span>
-        <span class="sr-only">(opens in a new tab)</span>
-      </a>
-    </div>
-  </section>
-</BaseLayout>
+<BlogIndexPage
+  basePath="/"
+  currentPage={1}
+  posts={pagePosts}
+  totalPages={totalPages}
+/>

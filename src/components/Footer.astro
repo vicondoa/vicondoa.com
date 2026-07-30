@@ -6,12 +6,10 @@ const year = new Date().getUTCFullYear();
 
 <footer class="site-footer">
   <div class="site-footer__inner">
-    <div>
-      <p class="site-footer__name">{SITE.title}</p>
-      <p class="site-footer__tagline">{SITE.tagline}</p>
-    </div>
+    <p class="site-footer__tagline">{SITE.tagline}</p>
     <div class="site-footer__meta">
       <a href="/rss.xml">RSS</a>
+      <a href="/about">About me</a>
       <a href={SITE.githubUrl} target="_blank" rel="me noopener noreferrer">
         GitHub <span class="sr-only">(opens in a new tab)</span>
       </a>

@@ -1,32 +1,45 @@
 ---
 import type { BlogPost } from '../lib/blog';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../site.config';
+import MatrixBackdrop from './MatrixBackdrop.astro';
 import Pagination from './Pagination.astro';
 import PostCard from './PostCard.astro';
 
 interface Props {
+  basePath: string;
   currentPage: number;
   posts: BlogPost[];
   totalPages: number;
 }
 
-const { currentPage, posts, totalPages } = Astro.props;
-const title = currentPage === 1 ? 'Blog' : `Blog — Page ${currentPage}`;
+const { basePath, currentPage, posts, totalPages } = Astro.props;
+const isFirstPage = currentPage === 1;
+const title = isFirstPage ? SITE.title : `Writing — Page ${currentPage}`;
 ---
 
 <BaseLayout
   title={title}
-  description="Essays, experiments, histories, and notes from John Vicondoa."
+  description="Essays, experiments, histories, and notes—organized mostly by curiosity."
 >
-  <section class="page-heading section-shell">
-    <p class="eyebrow">Writing / transmissions</p>
-    <h1>Blog</h1>
-    <p>
-      Essays, experiments, histories, and notes—organized mostly by curiosity.
-    </p>
-  </section>
+  {
+    isFirstPage ? (
+      <section class="blog-hero">
+        <MatrixBackdrop />
+        <div class="blog-hero__content section-shell">
+          <h1>Writing</h1>
+          <p>{SITE.tagline}</p>
+        </div>
+      </section>
+    ) : (
+      <section class="page-heading section-shell">
+        <h1>Writing</h1>
+        <p>Page {currentPage} of the archive.</p>
+      </section>
+    )
+  }
 
-  <section class="section-shell" aria-label="Posts">
+  <section class="section-shell blog-listing" aria-label="Posts">
     {
       posts.length > 0 ? (
         <div class="post-list">
@@ -41,7 +54,7 @@ const title = currentPage === 1 ? 'Blog' : `Blog — Page ${currentPage}`;
       )
     }
     <Pagination
-      basePath="/blog"
+      basePath={basePath}
       currentPage={currentPage}
       totalPages={totalPages}
     />

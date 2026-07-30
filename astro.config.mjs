@@ -8,6 +8,9 @@ export default defineConfig({
   site: 'https://vicondoa.com',
   output: 'static',
   trailingSlash: 'never',
+  redirects: {
+    '/blog': '/',
+  },
   integrations: [mdx(), sitemap()],
   markdown: {
     shikiConfig: {

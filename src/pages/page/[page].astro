@@ -1,11 +1,11 @@
 ---
-import BlogIndexPage from '../../../components/BlogIndexPage.astro';
+import BlogIndexPage from '../../components/BlogIndexPage.astro';
 import {
   getPageCount,
   getPostsPage,
   getPublishedPosts,
   type BlogPost,
-} from '../../../lib/blog';
+} from '../../lib/blog';
 
 interface Props {
   currentPage: number;
@@ -35,6 +35,7 @@ const { currentPage, posts, totalPages } = Astro.props;
 ---
 
 <BlogIndexPage
+  basePath="/"
   currentPage={currentPage}
   posts={posts}
   totalPages={totalPages}
