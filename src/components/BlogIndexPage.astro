@@ -2,7 +2,6 @@
 import type { BlogPost } from '../lib/blog';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE } from '../site.config';
-import MatrixBackdrop from './MatrixBackdrop.astro';
 import Pagination from './Pagination.astro';
 import PostCard from './PostCard.astro';
 
@@ -24,10 +23,7 @@ const title = isFirstPage ? SITE.title : `Archive — Page ${currentPage}`;
 >
   {
     isFirstPage ? (
-      <section class="blog-hero">
-        <MatrixBackdrop />
-        <h1 class="sr-only">John Vicondoa's blog</h1>
-      </section>
+      <h1 class="sr-only">John Vicondoa's blog</h1>
     ) : (
       <section class="page-heading section-shell">
         <h1>Archive</h1>

@@ -49,6 +49,20 @@ test('site navigation and GitHub profile links are present', async ({
       { exact: true },
     ),
   ).toHaveCount(1);
+  await expect(page.locator('.blog-hero')).toHaveCount(0);
+
+  const matrixPairs = page.locator('.site-header .matrix-backdrop__pair');
+  await expect(matrixPairs).toHaveCount(910);
+  expect(
+    await matrixPairs.evaluateAll((elements) =>
+      elements.every((element) =>
+        /^[0-9A-F]{2}$/.test(element.textContent ?? ''),
+      ),
+    ),
+  ).toBe(true);
+  expect(
+    await page.locator('.matrix-backdrop__pair--accent').count(),
+  ).toBeGreaterThan(20);
 
   await page
     .getByRole('link', { name: 'About me', exact: true })
