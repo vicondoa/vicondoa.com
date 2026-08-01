@@ -20,11 +20,13 @@ instead of typographic punctuation.
 
 Never use an em-dash. Restructure the sentence, or use a comma, a colon, or a
 period instead. The same applies to en-dashes, curly quotes, curly
-apostrophes, ellipsis characters, and arrows.
+apostrophes, and ellipsis characters.
 
 Non-ASCII characters are acceptable only when there is genuinely no other way
-to express something, such as a quoted proper name, a required code sample, or
-a technical symbol with no ASCII equivalent.
+to express something, such as a quoted proper name, a required code sample, a
+technical symbol with no ASCII equivalent, or a decorative glyph in the site
+chrome. Prose never qualifies. Dashes never qualify, and `make lint-dashes`
+enforces that.
 
 ## Banned patterns
 
@@ -63,9 +65,24 @@ piece.
 
 ## Markdown conventions
 
-Wrap prose at 80 columns. Prettier checks formatting, so run
-`pnpm format:check` before committing.
+Wrap prose at 80 columns. Prettier owns formatting, so let `make format` fix it
+rather than hand-aligning text.
 
 Post frontmatter is validated by `src/content.config.ts`. The `description`
 field appears on post cards, RSS, and social metadata, so write it as a real
 sentence rather than a label.
+
+## Before pushing
+
+`make check` is required before every push. It runs the Prettier check, the em
+dash and en dash lint, the Astro and content type check, a production build,
+and validation of the build output. Do not push, open a pull request, or ask
+for review until it passes.
+
+```sh
+make check
+```
+
+Run `make test` for the Playwright smoke and accessibility suite when the
+change touches markup, routing, or navigation. Run `make help` to see every
+target.

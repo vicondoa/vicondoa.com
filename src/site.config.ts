@@ -1,8 +1,7 @@
 export const SITE = {
   author: 'John Vicondoa',
   title: 'John Vicondoa',
-  tagline:
-    'Tech, AI, and special interests—straight from the underground (basement).',
+  tagline: 'Coding, AI, and other special interests straight from my lair.',
   description:
     'Personal essays and notes on technology, fatherhood, neurodiversity, electronic music, local history, and whatever else catches my attention.',
   url: 'https://vicondoa.com',

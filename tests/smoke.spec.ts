@@ -45,7 +45,7 @@ test('site navigation and GitHub profile links are present', async ({
   await expect(page.getByText('John Vicondoa', { exact: true })).toHaveCount(1);
   await expect(
     page.getByText(
-      'Tech, AI, and special interests—straight from the underground (basement).',
+      'Coding, AI, and other special interests straight from my lair.',
       { exact: true },
     ),
   ).toHaveCount(1);

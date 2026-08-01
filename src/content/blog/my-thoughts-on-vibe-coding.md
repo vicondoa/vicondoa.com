@@ -1,6 +1,6 @@
 ---
 title: 'My Thoughts on Vibe Coding'
-description: 'I have been coding since I was a teenager. That experience helped me get my first technology job at a dot-com when I was 18.'
+description: 'I love software engineering. I have been coding since I was 15 and got my first tech job at 18. I have never been more excited about my special interest, even while it is going through a radical change, and here is why.'
 publishedAt: 2026-07-31
 topics:
   - AI
