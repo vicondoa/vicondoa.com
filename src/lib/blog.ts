@@ -1,6 +1,5 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 
-import { isPreviewBuild } from './deploy';
 import { SITE } from '../site.config';
 export { getPageCount, getPostsPage } from './pagination';
 
@@ -13,20 +12,14 @@ export interface Topic {
   slug: string;
 }
 
-export async function getPublishedPosts(
-  options: { includeDrafts?: boolean } = {},
-): Promise<BlogPost[]> {
+export async function getPublishedPosts(): Promise<BlogPost[]> {
   const posts = await getCollection('blog');
-  const includeDrafts =
-    options.includeDrafts ?? (import.meta.env.DEV || isPreviewBuild());
 
-  return posts
-    .filter((post) => !post.data.draft || includeDrafts)
-    .sort(
-      (left, right) =>
-        right.data.publishedAt.valueOf() - left.data.publishedAt.valueOf() ||
-        left.data.title.localeCompare(right.data.title),
-    );
+  return posts.sort(
+    (left, right) =>
+      right.data.publishedAt.valueOf() - left.data.publishedAt.valueOf() ||
+      left.data.title.localeCompare(right.data.title),
+  );
 }
 
 export function getPostSlug(post: BlogPost): string {

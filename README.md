@@ -63,26 +63,13 @@ On NixOS, use the packaged Chromium binary instead:
 PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH="$(command -v chromium)" pnpm test:e2e
 ```
 
-## Previewing a draft
+## Previewing a pull request
 
-A post with `draft: true` is excluded from every production build, so it does
-not appear on a Cloudflare preview deployment by default either. Preview builds
-are ordinary production builds.
-
-Cloudflare branch deployments now include drafts. Any build of a branch other
-than `main` includes them, shows a draft banner on the post, marks it
-`noindex`, serves a `robots.txt` that disallows everything, and skips the
-sitemap. Open the branch preview URL that Cloudflare comments on the pull
+Cloudflare Pages builds every branch and serves the result from a preview URL,
+and that build is the same one production gets. There is no draft mode and
+nothing is held back, so a post under review can be read at its real URL before
+it merges. Cloudflare posts the branch and commit preview links on the pull
 request.
-
-To reproduce that locally:
-
-```sh
-make preview
-```
-
-`make check` refuses to pass if a draft or a blocking `robots.txt` ever reaches
-a production build.
 
 ## Writing a post
 
@@ -107,7 +94,6 @@ updatedAt: 2026-07-25 # optional
 topics:
   - Programming
   - Local history
-draft: false
 canonical: https://example.com/original-post # optional
 ---
 ```
@@ -116,9 +102,9 @@ Optional local cover images can be referenced with `cover`. When a cover is
 present, `coverAlt` is required. Shared static images can go in
 `public/images/`.
 
-Use `draft: true` while working. Drafts appear in the local development server
-but are excluded from production pages, topic archives, RSS, and the sitemap.
-Run `pnpm check` before publishing; invalid metadata fails the build.
+Frontmatter is strict, so an unrecognized key fails the build rather than
+being ignored. Run `make check` before publishing; invalid metadata fails the
+build.
 
 ## Publishing
 

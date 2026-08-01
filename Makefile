@@ -20,7 +20,7 @@ REQUIRED_ARTIFACTS := \
 	$(DIST)/social-card.png
 
 .DEFAULT_GOAL := help
-.PHONY: help install dev format lint lint-dashes lint-dates lint-format types build preview validate check test clean
+.PHONY: help install dev format lint lint-dashes lint-dates lint-format types build validate check test clean
 
 help: ## Show the available targets
 	@grep -hE '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) \
@@ -77,10 +77,6 @@ types: ## Check Astro components and content frontmatter
 build: ## Build the production site into dist/
 	$(PNPM) build
 
-preview: ## Build with drafts included, as Cloudflare does for a branch, and serve it
-	PREVIEW_BUILD=1 $(PNPM) build
-	$(PNPM) exec astro preview
-
 validate: ## Confirm the build produced the expected output
 	@missing=0; \
 	for artifact in $(REQUIRED_ARTIFACTS); do \
@@ -103,15 +99,6 @@ validate: ## Confirm the build produced the expected output
 	fi
 	@if [ -z "$$(find $(DIST)/blog -mindepth 1 -maxdepth 1 -type d)" ]; then \
 		echo "validate: no posts were built"; \
-		exit 1; \
-	fi
-	@if grep -q '^Disallow: /$$' $(DIST)/robots.txt; then \
-		echo "validate: robots.txt blocks the whole site"; \
-		echo "validate: this is a preview build, do not deploy it to production"; \
-		exit 1; \
-	fi
-	@if grep -rlq --include='*.html' 'class="draft-banner"' $(DIST); then \
-		echo "validate: a draft post was built into the production output"; \
 		exit 1; \
 	fi
 	@if grep -rlq 'astro:content-layer-deferred-module' $(DIST); then \

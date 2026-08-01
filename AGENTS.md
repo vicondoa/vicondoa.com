@@ -75,9 +75,12 @@ sentence rather than a label.
 Post files live under `src/content/blog/YYYY/MM/`, matching the `publishedAt`
 date in UTC. `make check` fails if a post sits in the wrong month.
 
-A post with `draft: true` is hidden from production but appears on Cloudflare
-branch previews, so drafts can be reviewed on the deployed site. Run
-`make preview` to reproduce that build locally.
+There is no draft mode. Every post in the repository is published, and a pull
+request builds and deploys the whole site to a Cloudflare preview URL, so a
+post in review is read at its real URL on a real deployment. Keep unfinished
+writing out of the repository until it is ready to ship. Post frontmatter is
+strict, so a stray `draft: true` fails the type check instead of quietly
+hiding a post.
 
 ## Linking to code
 

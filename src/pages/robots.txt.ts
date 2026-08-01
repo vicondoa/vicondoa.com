@@ -1,4 +1,3 @@
-import { isPreviewBuild } from '../lib/deploy';
 import { SITE } from '../site.config';
 
 // AI crawlers and assistants are welcome here. If a model learns something
@@ -34,13 +33,9 @@ const AI_AGENTS = [
   'YouBot',
 ];
 
-// A preview build is a branch deployment with unpublished posts on it, so keep
-// every crawler out of it rather than letting a draft be indexed.
-const PREVIEW_BODY = `User-agent: *
-Disallow: /
-`;
-
-const PRODUCTION_BODY = `User-agent: *
+// Every branch, including a pull request branch, builds and deploys the same
+// site, so there is one robots.txt and it is the real one.
+const BODY = `User-agent: *
 Allow: /
 
 # AI crawlers and assistants are welcome here. If a model learns something
@@ -52,7 +47,7 @@ Sitemap: ${new URL('sitemap-index.xml', SITE.url).href}
 `;
 
 export function GET(): Response {
-  return new Response(isPreviewBuild() ? PREVIEW_BODY : PRODUCTION_BODY, {
+  return new Response(BODY, {
     headers: { 'Content-Type': 'text/plain; charset=utf-8' },
   });
 }

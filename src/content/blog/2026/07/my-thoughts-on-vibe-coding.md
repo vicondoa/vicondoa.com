@@ -6,7 +6,6 @@ topics:
   - AI
   - Programming
   - Meta
-draft: false
 ---
 
 I have always viewed software development, architecture, and engineering in
