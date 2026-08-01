@@ -31,11 +31,21 @@ export function getPostSlug(post: BlogPost): string {
   return post.id
     .replace(/\.(md|mdx)$/i, '')
     .replace(/\/index$/i, '')
-    .replace(/^\/|\/$/g, '');
+    .replace(/^\/|\/$/g, '')
+    .split('/')
+    .pop()!;
+}
+
+export function getPostDatePath(post: BlogPost): string {
+  const published = post.data.publishedAt;
+  const year = published.getUTCFullYear();
+  const month = `${published.getUTCMonth() + 1}`.padStart(2, '0');
+
+  return `${year}/${month}`;
 }
 
 export function getPostUrl(post: BlogPost): string {
-  return `/blog/${getPostSlug(post)}`;
+  return `/blog/${getPostDatePath(post)}/${getPostSlug(post)}`;
 }
 
 export function getReadingTime(post: BlogPost): number {

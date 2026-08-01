@@ -19,7 +19,7 @@ REQUIRED_ARTIFACTS := \
 	$(DIST)/social-card.png
 
 .DEFAULT_GOAL := help
-.PHONY: help install dev format lint lint-dashes lint-format types build validate check test clean
+.PHONY: help install dev format lint lint-dashes lint-dates lint-format types build validate check test clean
 
 help: ## Show the available targets
 	@grep -hE '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) \
@@ -50,7 +50,25 @@ lint-dashes: ## Fail if an em dash or en dash appears anywhere in the sources
 	fi
 	@echo "lint-dashes: no em dashes or en dashes found"
 
-lint: lint-format lint-dashes ## Run every lint check
+lint-dates: ## Fail if a post is not filed under the YYYY/MM of its publish date
+	@bad=0; \
+	for post in $$(find src/content/blog -type f \( -name '*.md' -o -name '*.mdx' \)); do \
+		published=$$(sed -n 's/^publishedAt:[[:space:]]*//p' "$$post" | head -1 | tr -d "'\"" | cut -c1-7); \
+		expected="src/content/blog/$$(echo "$$published" | tr '-' '/')"; \
+		actual=$$(dirname "$$post"); \
+		if [ "$$actual" != "$$expected" ]; then \
+			echo "$$post: publishedAt $$published expects $$expected/"; \
+			bad=1; \
+		fi; \
+	done; \
+	if [ "$$bad" -ne 0 ]; then \
+		echo; \
+		echo "Posts live under src/content/blog/YYYY/MM/. See README.md."; \
+		exit 1; \
+	fi
+	@echo "lint-dates: every post is filed under its publish month"
+
+lint: lint-format lint-dashes lint-dates ## Run every lint check
 
 types: ## Check Astro components and content frontmatter
 	$(PNPM) check

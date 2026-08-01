@@ -72,12 +72,29 @@ Post frontmatter is validated by `src/content.config.ts`. The `description`
 field appears on post cards, RSS, and social metadata, so write it as a real
 sentence rather than a label.
 
+Post files live under `src/content/blog/YYYY/MM/`, matching the `publishedAt`
+date in UTC. `make check` fails if a post sits in the wrong month.
+
+## Linking to code
+
+When a post explains how something was built, link to the code that does it.
+
+Always link by full 40-character commit SHA. Never link to a branch, a tag, or
+a default branch path, because those move and the post then describes code that
+is no longer there. Use `/blob/<sha>/path` for a file and add `#L10-L25` to
+point at the specific lines under discussion.
+
+Read the source comments before writing the explanation. Repositories worth
+linking to tend to explain their own reasoning, including the approaches that
+were discarded, and that reasoning is usually better than a summary written
+from the diff alone.
+
 ## Before pushing
 
 `make check` is required before every push. It runs the Prettier check, the em
-dash and en dash lint, the Astro and content type check, a production build,
-and validation of the build output. Do not push, open a pull request, or ask
-for review until it passes.
+dash and en dash lint, the post date-path lint, the Astro and content type
+check, a production build, and validation of the build output. Do not push,
+open a pull request, or ask for review until it passes.
 
 ```sh
 make check

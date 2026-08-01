@@ -65,9 +65,15 @@ PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH="$(command -v chromium)" pnpm test:e2e
 
 ## Writing a post
 
-Create a `.md` or `.mdx` file under `src/content/blog/`. The file path becomes
-the URL below `/blog/`; for example, `local-history/old-depot.mdx` becomes
-`/blog/local-history/old-depot`.
+Create a `.md` or `.mdx` file under `src/content/blog/YYYY/MM/`, where the
+directories match the post's `publishedAt` date in UTC. The file name becomes
+the last URL segment; for example,
+`src/content/blog/2026/07/old-depot.md` published in July 2026 becomes
+`/blog/2026/07/old-depot`.
+
+The URL is built from `publishedAt` rather than from the file path, so the two
+cannot drift apart silently. `make check` fails if a post sits in a directory
+that does not match its own publish date.
 
 Every post begins with validated frontmatter:
 

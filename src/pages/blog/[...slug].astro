@@ -4,6 +4,7 @@ import { render } from 'astro:content';
 
 import FormattedDate from '../../components/FormattedDate.astro';
 import {
+  getPostDatePath,
   getPostSlug,
   getPostUrl,
   getPublishedPosts,
@@ -21,7 +22,7 @@ export async function getStaticPaths() {
   const posts = await getPublishedPosts();
 
   return posts.map((post) => ({
-    params: { slug: getPostSlug(post) },
+    params: { slug: `${getPostDatePath(post)}/${getPostSlug(post)}` },
     props: { post },
   }));
 }
