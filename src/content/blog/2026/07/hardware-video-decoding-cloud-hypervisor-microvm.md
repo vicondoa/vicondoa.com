@@ -17,9 +17,8 @@ the guest.
 There was a constraint underneath that goal which ended up shaping the whole
 project. I already had a working decode path, and it required a forked Firefox.
 Firefox ships security patches constantly, and a fork means rebasing on every
-release forever. I did not want to maintain that. So the real target was not
-just hardware decode. It was hardware decode with a completely unmodified
-browser.
+release forever. I did not want to maintain that. So the real target was
+hardware decode with a completely unmodified browser.
 
 I got there. Stock upstream Firefox now runs inside a Cloud Hypervisor microVM,
 renders through the host T1000, and decodes H.264 on the host's NVDEC engine,
