@@ -1,5 +1,5 @@
 ---
-title: 'Getting Firefox to decode video on my old NVIDIA GPU on a microVM'
+title: 'Getting Firefox to decode video on my old NVIDIA GPU in a microVM'
 description:
   'Chronicle of my trials getting video decoding on my NVIDIA GPU working inside
   a Cloud Hypervisor microVM. Vulkan to the rescue, kind of.'
