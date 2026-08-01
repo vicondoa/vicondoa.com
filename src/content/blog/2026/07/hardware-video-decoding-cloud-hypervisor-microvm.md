@@ -14,11 +14,11 @@ I got stock upstream Firefox to decode H.264 in hardware from inside a
 [Cloud Hypervisor](https://www.cloudhypervisor.org/) microVM on my desktop. It
 renders through the host's NVIDIA T1000 and decodes on that card's NVDEC engine,
 the fixed-function video decoder sitting on the NVIDIA die next to the shader
-cores. I did not patch Firefox. Every change that makes it work lives underneath
-the browser, in the guest's [Mesa](https://gitlab.freedesktop.org/mesa/mesa)
-driver and in the host's
-[virglrenderer](https://gitlab.freedesktop.org/virgl/virglrenderer), and I wrote
-all of it.
+cores. None of this worked out of the box. Nothing in the stack carried video at
+all, so I had to patch [Mesa](https://gitlab.freedesktop.org/mesa/mesa) in the
+guest and [virglrenderer](https://gitlab.freedesktop.org/virgl/virglrenderer) on
+the host, and extend the protocol between them. What I did not patch is Firefox.
+Every change that makes it work lives underneath the browser.
 
 That constraint drove everything. I already had a working decode path and it
 required a forked Firefox, which means rebasing on a browser whose release
