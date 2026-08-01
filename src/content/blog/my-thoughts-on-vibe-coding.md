@@ -59,12 +59,17 @@ back when my experience tells me there is probably another path. When an
 implementation comes back, I can look for the same problems I would expect from
 a junior developer or from a project that grew too quickly.
 
-I can look for poor naming, unclear abstractions, weak boundaries, unnecessary
-complexity, slow builds, unreliable tests, duplicated patterns, and designs that
-will become increasingly difficult to extend. I can recognize the point where a
-project starts fighting every new feature. I can see when a shortcut is about to
-multiply into dozens of bugs. All of those inputs help me become a better
-manager for my coding agents.
+I can look for obvious security holes, poor naming, unclear abstractions, weak
+boundaries, unnecessary complexity, slow builds, unreliable tests, duplicated
+patterns, and designs that will become increasingly difficult to extend. I watch
+for code that cannot be tested because of the way it was designed, and for
+functionality that duplicates something that already exists somewhere else in
+the project. I can recognize the point where a project starts fighting every new
+feature. I can see when a shortcut is about to multiply into dozens of bugs.
+
+None of these signals are new. Slop always looked like slop, AI or not. I am
+applying the same judgment I have applied for my entire career, and all of those
+inputs help me become a better manager for my coding agents.
 
 ## The Fundamentals Still Matter
 
