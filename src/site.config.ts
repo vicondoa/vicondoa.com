@@ -3,7 +3,7 @@ export const SITE = {
   title: 'John Vicondoa',
   tagline: 'Coding, AI, and other special interests straight from my lair.',
   description:
-    'Personal essays and notes on technology, fatherhood, neurodiversity, electronic music, local history, and whatever else catches my attention.',
+    'Building secure systems, AI agents, and the tools I always wanted as a developer.',
   url: 'https://vicondoa.com',
   githubUrl: 'https://github.com/vicondoa',
   locale: 'en-US',

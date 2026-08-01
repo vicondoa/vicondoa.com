@@ -5,7 +5,7 @@ import { SITE } from '../site.config';
 
 <BaseLayout
   title="About"
-  description="My parents bought a hand-built 286 in the 1990s. This is how that turned into a career in software, speech recognition, and large language models."
+  description="A sheepherder's son from Vacaville who taught himself on a hand-built 286. This is how that turned into speech recognition, the OpenAI Realtime API on Azure, and the secure desktop I am building now."
 >
   <section class="page-heading section-shell">
     <p class="eyebrow">About / John Vicondoa</p>
@@ -17,18 +17,22 @@ import { SITE } from '../site.config';
       <p class="lede">
         In the 1990s, my parents saw Bill Gates say on television that his goal
         was a computer on a desk in every home. Not long after that, they bought
-        a hand-built 286 from a friend and put it on a desk in our house.
-      </p>
-      <p>
-        It ran MS-DOS and had almost nothing installed on it. My parents were
-        both blue-collar workers, and neither of them knew what to do with it,
-        so it mostly sat idle. I was fascinated by it, but I had no frame of
-        reference for how to use it or even how to learn. I would open the
-        command prompt and type natural-language commands such as <code
+        a hand-built 286 from a friend and put it on a desk in our house. It ran
+        MS-DOS and had almost nothing installed on it. I would open the command
+        prompt and type natural-language commands such as <code
           >let me write a paper</code
         > or <code>how are you doing?</code> The computer always answered the same
-        way: <code>command not found</code>. I opened the case and stared at the
-        technology inside, mesmerized by a machine I could not yet understand.
+        way: <code>command not found</code>.
+      </p>
+      <p>
+        My father immigrated to the United States from the Basque Country in
+        Spain as a young man, where he worked as a sheepherder. He later met my
+        mother, who had also immigrated from Spain, and together they raised our
+        family in Vacaville, California. They were both blue-collar workers, and
+        neither of them knew what to do with the machine, so it mostly sat idle.
+        I was fascinated by it, but I had no frame of reference for how to use
+        it or even how to learn. I opened the case and stared at the technology
+        inside, mesmerized by a machine I could not yet understand.
       </p>
       <p>
         That changed when one of my mom's coworkers came over. She was the first
@@ -95,34 +99,60 @@ import { SITE } from '../site.config';
         After Rentals.com and several other startups, I joined Tellme Networks.
         Before mobile speech applications were common, I traveled around the
         country working with major telephone carriers to automate 411 directory
-        assistance. Later, I helped build what was one of the first mobile
-        speech-recognition applications for BlackBerry. Microsoft eventually
-        acquired Tellme, which was a little ironic considering my earlier
-        history with Comic Chat.
+        assistance. Later I worked on what was among the first speech
+        recognition applications for the BlackBerry platform, in the mid-2000s.
+        Before smartphones made voice assistants commonplace, we were putting
+        speech recognition into people's pockets and connecting them to
+        large-scale voice services. Microsoft eventually acquired Tellme, which
+        was a little ironic considering my earlier history with Comic Chat.
       </p>
       <p>
         At Microsoft, I worked on speech experiences across a wide range of
         products, including Bing Voice, Xbox One, and several Windows speech
-        features. More recently, I helped launch the OpenAI Realtime API on
-        Azure, and I am currently involved in other AI projects.
+        features. Later I helped launch the OpenAI Realtime API on Azure, which
+        was one of the most exciting projects I have worked on because it
+        represented a genuine shift in how speech systems are built. It was the
+        first production speech-to-speech model of its kind, and the Realtime
+        API made it possible to use. Overnight, it made many of the approaches I
+        had spent years building feel obsolete.
       </p>
       <p>
-        I love computers and everything they have brought into my life. I love
-        the art of engineering. I love solving problems, exploring unfamiliar
-        layers of a system, and understanding how the pieces fit together. Most
-        of all, I love the people and communities that technology has connected
-        me to.
+        What made that project especially meaningful to me was that it brought
+        together so many different parts of my background. I had spent years
+        working in speech recognition, telephony, networking, distributed
+        systems, and low-level software. I also still had the curiosity of the
+        teenager who loved taking computers apart to understand how they worked.
+        Shipping the service on Azure alongside our partner required all of
+        those skills at once.
+      </p>
+      <p>
+        Today I work on Azure AI Foundry. While I still work on APIs, much of my
+        time is focused on using AI agents to improve how software is developed,
+        tested, and delivered. I am particularly interested in building secure
+        environments where agents can work independently without creating
+        unnecessary risk. That interest naturally extends into sandboxing,
+        virtualization, and desktop architecture, which has become a major focus
+        of my personal projects.
       </p>
       <p>
         My current fascination is large language models. I have been waiting a
         long time for computing to reach this point, where a person can finally
         interact with a machine in the way I instinctively tried to when I first
-        sat down at that 286. I could not be more excited about where we are or
-        where we are going.
+        sat down at that 286.
       </p>
       <h2>Elsewhere</h2>
       <p>
-        My projects and code live on
+        My most significant open source project is D2B, short for Double Dutch
+        Bus. It is my attempt to build the desktop environment I have wanted for
+        years: one that makes it easy to work across multiple trust boundaries
+        while safely collaborating with AI agents. It combines virtualization,
+        secure brokers, Wayland integration, and a Kubernetes-inspired control
+        plane into a single desktop experience. The goal is to reduce cognitive
+        load by making secure isolation feel natural instead of getting in the
+        way.
+      </p>
+      <p>
+        D2B and the rest of my code live on
         <a href={SITE.githubUrl} target="_blank" rel="me noopener noreferrer">
           GitHub <span class="sr-only">(opens in a new tab)</span>
         </a>.
