@@ -1,5 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 
+import { isPreviewBuild } from './deploy';
 import { SITE } from '../site.config';
 export { getPageCount, getPostsPage } from './pagination';
 
@@ -16,7 +17,8 @@ export async function getPublishedPosts(
   options: { includeDrafts?: boolean } = {},
 ): Promise<BlogPost[]> {
   const posts = await getCollection('blog');
-  const includeDrafts = options.includeDrafts ?? import.meta.env.DEV;
+  const includeDrafts =
+    options.includeDrafts ?? (import.meta.env.DEV || isPreviewBuild());
 
   return posts
     .filter((post) => !post.data.draft || includeDrafts)

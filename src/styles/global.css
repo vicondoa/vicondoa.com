@@ -613,6 +613,24 @@ p {
   padding-top: clamp(4rem, 9vw, 7rem);
 }
 
+.draft-banner {
+  padding: 0.9rem 1.1rem;
+  border: 1px dashed var(--magenta);
+  border-radius: 0.55rem;
+  margin-bottom: 2.5rem;
+  background: color-mix(in srgb, var(--magenta) 7%, transparent);
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.draft-banner strong {
+  color: var(--magenta);
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .post-header {
   padding-bottom: 2.5rem;
   border-bottom: 1px solid var(--border);

@@ -63,6 +63,27 @@ On NixOS, use the packaged Chromium binary instead:
 PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH="$(command -v chromium)" pnpm test:e2e
 ```
 
+## Previewing a draft
+
+A post with `draft: true` is excluded from every production build, so it does
+not appear on a Cloudflare preview deployment by default either. Preview builds
+are ordinary production builds.
+
+Cloudflare branch deployments now include drafts. Any build of a branch other
+than `main` includes them, shows a draft banner on the post, marks it
+`noindex`, serves a `robots.txt` that disallows everything, and skips the
+sitemap. Open the branch preview URL that Cloudflare comments on the pull
+request.
+
+To reproduce that locally:
+
+```sh
+make preview
+```
+
+`make check` refuses to pass if a draft or a blocking `robots.txt` ever reaches
+a production build.
+
 ## Writing a post
 
 Create a `.md` or `.mdx` file under `src/content/blog/YYYY/MM/`, where the

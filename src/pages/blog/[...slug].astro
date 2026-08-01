@@ -42,6 +42,7 @@ const olderPost =
   title={post.data.title}
   description={post.data.description}
   canonical={post.data.canonical}
+  noindex={post.data.draft}
   article={{
     publishedAt: post.data.publishedAt,
     updatedAt: post.data.updatedAt,
@@ -49,6 +50,15 @@ const olderPost =
   }}
 >
   <article class="post-shell">
+    {
+      post.data.draft && (
+        <p class="draft-banner">
+          <strong>Draft.</strong> This post is unpublished and still being
+          edited. It is visible here because this is a preview build, and it
+          does not appear on the live site.
+        </p>
+      )
+    }
     <header class="post-header">
       <p class="eyebrow">Field note / {post.data.topics[0]}</p>
       <h1>{post.data.title}</h1>

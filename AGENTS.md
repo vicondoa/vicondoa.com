@@ -75,6 +75,10 @@ sentence rather than a label.
 Post files live under `src/content/blog/YYYY/MM/`, matching the `publishedAt`
 date in UTC. `make check` fails if a post sits in the wrong month.
 
+A post with `draft: true` is hidden from production but appears on Cloudflare
+branch previews, so drafts can be reviewed on the deployed site. Run
+`make preview` to reproduce that build locally.
+
 ## Linking to code
 
 When a post explains how something was built, link to the code that does it.
