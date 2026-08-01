@@ -202,24 +202,9 @@ p {
 .site-header {
   position: relative;
   z-index: 10;
-  overflow: hidden;
   border-bottom: 1px solid var(--border);
-  background: var(--bg);
+  background: var(--surface);
   isolation: isolate;
-}
-
-.site-header::after {
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--bg) 87%, transparent) 0%,
-    color-mix(in srgb, var(--bg) 64%, transparent) 46%,
-    color-mix(in srgb, var(--bg) 76%, transparent) 100%
-  );
-  content: '';
-  pointer-events: none;
 }
 
 .site-header__inner,
@@ -578,38 +563,6 @@ p {
   margin-bottom: 0;
 }
 
-.matrix-backdrop {
-  position: absolute;
-  z-index: 0;
-  inset: -1.25rem -1rem;
-  color: var(--text-muted);
-  opacity: 0.62;
-  pointer-events: none;
-}
-
-.matrix-backdrop svg {
-  width: 100%;
-  height: 100%;
-}
-
-.matrix-backdrop__pair {
-  fill: var(--cyan);
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: 0.035em;
-  opacity: 0.64;
-}
-
-.matrix-backdrop__pair--accent {
-  fill: var(--magenta);
-  opacity: 0.88;
-}
-
-.matrix-backdrop__pair--dim {
-  opacity: 0.32;
-}
-
 .blog-listing {
   padding-top: clamp(2rem, 4vw, 3rem);
 }
@@ -925,11 +878,6 @@ p {
     grid-column: 1 / -1;
     grid-row: 1;
     text-align: center;
-  }
-
-  .matrix-backdrop {
-    inset: -1rem -20rem;
-    opacity: 0.58;
   }
 
   .topic-grid,
