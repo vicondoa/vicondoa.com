@@ -1,6 +1,8 @@
 ---
-title: 'Hardware Video Decoding in a Cloud Hypervisor microVM on an NVIDIA T1000'
-description: 'Stock Firefox in a microVM now decodes H.264 on my desktop GPU through Vulkan Video. Nothing existed at either end of that path, and the last bug was one plane of an NV12 frame.'
+title: 'Getting Firefox to decode video for my old NVIDIA GPU on a microVM'
+description:
+  'Chronicle of my trials getting video decoding on my NVIDIA GPU working inside
+  a Cloud Hypervisor microVM. Vulkan to the rescue, kind of.'
 publishedAt: 2026-07-31
 topics:
   - Virtualization
@@ -8,19 +10,21 @@ topics:
   - Programming
 ---
 
-Stock upstream Firefox runs inside a
-[Cloud Hypervisor](https://www.cloudhypervisor.org/) microVM on my desktop,
-renders through the host's NVIDIA T1000, and decodes H.264 on that card's NVDEC
-engine, the fixed-function video decoder sitting on the NVIDIA die next to the
-shader cores. Firefox carries no patches. Every change that makes it work lives
-underneath the browser, in the guest's
-[Mesa](https://gitlab.freedesktop.org/mesa/mesa) driver and in the host's
-[virglrenderer](https://gitlab.freedesktop.org/virgl/virglrenderer).
+I got stock upstream Firefox to decode H.264 in hardware from inside a
+[Cloud Hypervisor](https://www.cloudhypervisor.org/) microVM on my desktop. It
+renders through the host's NVIDIA T1000 and decodes on that card's NVDEC engine,
+the fixed-function video decoder sitting on the NVIDIA die next to the shader
+cores. I did not patch Firefox. Every change that makes it work lives underneath
+the browser, in the guest's [Mesa](https://gitlab.freedesktop.org/mesa/mesa)
+driver and in the host's
+[virglrenderer](https://gitlab.freedesktop.org/virgl/virglrenderer), and I wrote
+all of it.
 
 That constraint drove everything. I already had a working decode path and it
 required a forked Firefox, which means rebasing on a browser whose release
 cadence is driven by security fixes. Every rebase is a chance to silently break
-one. So the target was hardware decode with a completely unmodified browser.
+one. So I set the target at hardware decode with a completely unmodified
+browser.
 
 The guest never talks to the NVIDIA driver. It talks to `virtio-gpu`, a
 paravirtualised GPU device, and the commands it writes there come out in a host
@@ -41,9 +45,8 @@ wanted v52, which is the first release to ship `--generic-vhost-user` and which
 includes the fix for CVE-2026-45782, a virtio-block use-after-free that is a
 guest to host escape. So I
 [vendored the Spectrum patches and rebased them onto v52](https://github.com/vicondoa/d2b/blob/ed38e5e5b1fbb6268cf72265a17cbf6fca1d5f84/labs/venus-vulkan-video/pkgs/spectrum-ch/default.nix),
-along with the
-[`rust-vmm/vhost`](https://github.com/rust-vmm/vhost) backports the shared
-memory regions need. The two that matter are
+along with the [`rust-vmm/vhost`](https://github.com/rust-vmm/vhost) backports
+the shared memory regions need. The two that matter are
 [`virtio-devices: add a GPU device`](https://github.com/vicondoa/d2b/blob/ed38e5e5b1fbb6268cf72265a17cbf6fca1d5f84/labs/venus-vulkan-video/pkgs/spectrum-ch/cloud-hypervisor/0002-virtio-devices-add-a-GPU-device.patch)
 and
 [`vhost-user-media device`](https://github.com/vicondoa/d2b/blob/ed38e5e5b1fbb6268cf72265a17cbf6fca1d5f84/labs/venus-vulkan-video/pkgs/spectrum-ch/cloud-hypervisor/0003-vhost-user-media-device.patch).
@@ -107,7 +110,7 @@ software. Below the browser, nothing existed at any layer:
 | Mesa Venus              | no video passthrough, and actively strips video format-feature bits from NV12 |
 | upstream merge requests | none, in any of the three                                                     |
 
-The path that had to be built, end to end:
+The path I had to build, end to end:
 
 ```text
 stock Firefox (guest)
@@ -124,10 +127,10 @@ which is what you want in the middle of a protocol you are extending.
 
 ## Why Vulkan Video and not VA-API
 
-VA-API is what Firefox looks for first on Linux,
-and `nvidia-vaapi-driver` provides it on NVIDIA by translating to NVDEC.
-virglrenderer already has VA-API video support and is even built with it. It
-cannot work, for a reason in the wire format rather than in anyone's code.
+VA-API is what Firefox looks for first on Linux, and `nvidia-vaapi-driver`
+provides it on NVIDIA by translating to NVDEC. virglrenderer already has VA-API
+video support and is even built with it. It cannot work, for a reason in the
+wire format rather than in anyone's code.
 
 Reaching it at all takes two overrides. Nothing passes
 `VIRGL_RENDERER_USE_VIDEO`, bit 11 of the flags word `virgl_renderer_init()`
@@ -180,15 +183,15 @@ Vulkan Video has no such gap, and Firefox compiles it in unconditionally:
 set_config("MOZ_ENABLE_VULKAN_VIDEO", True, when=toolkit_gtk)
 ```
 
-The V4L2 decoder I had been using before is gated to
-`target.cpu in ("arm", "aarch64", "riscv64")` on the same file. One of those
-needs a browser fork and one does not.
+The V4L2 decoder I had been using before, V4L2 being the Video4Linux2 kernel
+media interface, is gated to `target.cpu in ("arm", "aarch64", "riscv64")` on
+the same file. One of those needs a browser fork and one does not.
 
 ## The three forks
 
-Each fork carries a `base/<rev>` tag at its seed commit and does its work on a
+I give each fork a `base/<rev>` tag at its seed commit and do the work on a
 `vulkan-video` branch, so it stays rebaseable and upstreamable. Every link below
-is pinned to a commit rather than a branch. The code carries long comments
+is pinned to a commit rather than a branch. I left long comments in the code
 explaining why each change is shaped the way it is, and those comments are the
 real reference.
 
@@ -199,8 +202,8 @@ real reference.
 | `mesa/mesa`            | [vicondoa/mesa-venus-vulkan-video @ `848ed88`](https://github.com/vicondoa/mesa-venus-vulkan-video/tree/848ed88cbbfa14438185a504f2a09c4eb66d5bb2)                   |
 
 **The wire protocol.** Venus command IDs are explicitly assigned in
-`VK_EXT_command_serialization.xml` rather than derived from position, and
-the wire format version must not change, because Venus requires exact guest and
+`VK_EXT_command_serialization.xml` rather than derived from position, and the
+wire format version must not change, because Venus requires exact guest and
 renderer equality. At the base revision 345 command types were assigned; the
 thirteen video commands append at 346 through 358 and no existing value moves.
 The commits are
@@ -218,7 +221,7 @@ matters more than it looks: every array count in a video struct arrives from an
 untrusted guest, and capping them is the difference between a protocol extension
 and a way out of the VM.
 
-**The guest driver.** Mesa's Venus ICD gets nine video entrypoints in
+**The guest driver.** I gave Mesa's Venus ICD nine video entrypoints in
 [`src/virtio/vulkan/vn_video.c`](https://github.com/vicondoa/mesa-venus-vulkan-video/blob/848ed88cbbfa14438185a504f2a09c4eb66d5bb2/src/virtio/vulkan/vn_video.c),
 covering session creation, session parameters, and memory binding, plus four
 command-buffer entrypoints in `vn_command_buffer.c`:
@@ -230,7 +233,7 @@ conditional on the renderer, so the extension bits are set only alongside a
 guest sees per-family codec operations rather than a video queue that decodes
 nothing. Decode only, H.264 only, no encode.
 
-**The host renderer.** virglrenderer gets
+**The host renderer.** I gave virglrenderer
 [`src/venus/vkr_video.c`](https://github.com/vicondoa/virglrenderer-venus-vulkan-video/blob/add87c05362359bf4d82067f2e9e37cd8705dc63/src/venus/vkr_video.c),
 about 540 lines, plus `vkr_video_validate.h`, `vkr_video_reject.h`, and
 `vkr_video_scrub.h`. Those validate the decode scope, the DPB slots, the
@@ -244,8 +247,8 @@ and
 [zeroing output pNext payloads on the format-query reject](https://github.com/vicondoa/virglrenderer-venus-vulkan-video/commit/c44f6e50a6b002c65f566367e9961e0c02ad6173)
 both exist to avoid leaking host state back to the guest on a failed path.
 
-With those three in place `vkCmdDecodeVideoKHR` fired, sessions were created,
-and the host NVDEC engine showed activity.
+With those three in place `vkCmdDecodeVideoKHR` fired, the sessions came up, and
+I saw activity on the host NVDEC engine.
 
 ## The green frame
 
@@ -273,11 +276,11 @@ Two separate images breaks decode, and disjoint planes via
 
 Firefox imports the two planes separately, one EGL image each, EGL being the
 interface a driver uses to import buffers. That is the portable approach that
-works on every native driver. Its log reports both
-imports succeeding with every field correct. The two file descriptors refer to
-regions of one buffer, so in the guest they resolve to the same GEM handle, the
-kernel's process-local integer naming one buffer object. Four defects sat
-between that log and a correct picture.
+works on every native driver. Its log reports both imports succeeding with every
+field correct. The two file descriptors refer to regions of one buffer, so in
+the guest they resolve to the same GEM handle, the kernel's process-local
+integer naming one buffer object. Four defects sat between that log and a
+correct picture.
 
 **1. The plane index did not survive the import.**
 [`virgl_drm_winsys_resource_create_handle()`](https://github.com/vicondoa/mesa-venus-vulkan-video/blob/848ed88cbbfa14438185a504f2a09c4eb66d5bb2/src/gallium/winsys/virgl/drm/virgl_drm_winsys.c#L635-L663)
@@ -311,19 +314,17 @@ virglrenderer already had per-plane images and already selected them by index in
 `vrend_create_sampler_view()`, and nothing connected the two halves. Upstream
 only builds those images from a `gbm_bo`, and crosvm initialises virglrenderer
 with surfaceless EGL and no GBM (Generic Buffer Management) device, so
-`egl->gbm` is NULL and
-`virgl_egl_aux_plane_image_from_gbm_bo()` cannot serve here at all. The
-replacement
+`egl->gbm` is NULL and `virgl_egl_aux_plane_image_from_gbm_bo()` cannot serve
+here at all. The replacement
 [imports the plane straight from the DMA-BUF](https://github.com/vicondoa/virglrenderer-venus-vulkan-video/blob/add87c05362359bf4d82067f2e9e37cd8705dc63/src/vrend/vrend_renderer.c#L13604-L13633)
 with the per-plane stride and offset the guest sent.
 
 That last one had two problems stacked behind it. The fourcc, the four-character
-code naming a pixel format, has to be one the
-driver accepts, and a two-channel 8-bit plane has two DRM spellings differing
-only in which byte is named first. Querying this host's EGL returned `RG88=1`
-and `GR88=0`, so importing chroma as `GR88`, the semantically correct spelling,
-failed outright. Firefox carries the same substitution for the same reason. The
-fix is to
+code naming a pixel format, has to be one the driver accepts, and a two-channel
+8-bit plane has two DRM spellings differing only in which byte is named first.
+Querying this host's EGL returned `RG88=1` and `GR88=0`, so importing chroma as
+`GR88`, the semantically correct spelling, failed outright. Firefox carries the
+same substitution for the same reason. The fix is to
 [try both spellings](https://github.com/vicondoa/virglrenderer-venus-vulkan-video/blob/add87c05362359bf4d82067f2e9e37cd8705dc63/src/vrend/vrend_renderer.c#L13645-L13660).
 Then the plane view has to be resolved first: the guest encodes the plane index
 in the field that otherwise reads as `first_layer`, so a plane view arrives
@@ -403,9 +404,9 @@ fixed anything on its own.
 
 ## What did not work
 
-The V4L2 path was the previous approach and it still works, through a patched
-crosvm `virtio-media` device forwarded by a patched Cloud Hypervisor to a
-VA-API backend. It has two problems. Decode is a completely separate path from
+V4L2 was my previous approach and it still works, through a patched crosvm
+`virtio-media` device forwarded by a patched Cloud Hypervisor to a VA-API
+backend. It has two problems. Decode is a completely separate path from
 rendering, so decoded frames are not first-class GPU images on the same device
 as everything else. More importantly Firefox does not use it without a fork,
 because `MOZ_ENABLE_V4L2` is gated to arm, aarch64, and riscv64. My
