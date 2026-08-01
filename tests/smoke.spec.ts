@@ -11,7 +11,7 @@ test('core routes render and expose discovery files', async ({
 }) => {
   const routes = [
     '/',
-    '/blog/start-here',
+    '/blog/my-thoughts-on-vibe-coding',
     '/topics',
     '/topics/programming',
     '/about',
@@ -97,7 +97,7 @@ test('custom 404 is served for a missing route', async ({ page }) => {
 test('representative pages have no serious accessibility violations', async ({
   page,
 }) => {
-  for (const route of ['/', '/blog/start-here', '/about']) {
+  for (const route of ['/', '/blog/my-thoughts-on-vibe-coding', '/about']) {
     await page.goto(route);
     const results = await new AxeBuilder({ page }).analyze();
     const seriousViolations = results.violations.filter(
