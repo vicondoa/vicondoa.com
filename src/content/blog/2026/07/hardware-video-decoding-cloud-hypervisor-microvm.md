@@ -32,13 +32,13 @@ call becomes the same host Vulkan call. Venus ships as a Mesa ICD, an
 Installable Client Driver, which is the shared library the Vulkan loader
 presents to an application as a GPU driver.
 
-## The VMM, and why it is not crosvm
+## The virtual machine monitor, and why it is not crosvm
 
 Cloud Hypervisor has no `virtio-gpu` device.
 [Spectrum OS](https://spectrum-os.org/software/cloud-hypervisor/) maintains a
 patch set that adds one, but their patches target Cloud Hypervisor v50 and I
-wanted v52, which is the first release to ship `--generic-vhost-user` and the
-first with the fix for CVE-2026-45782, a virtio-block use-after-free that is a
+wanted v52, which is the first release to ship `--generic-vhost-user` and which
+includes the fix for CVE-2026-45782, a virtio-block use-after-free that is a
 guest to host escape. So I
 [vendored the Spectrum patches and rebased them onto v52](https://github.com/vicondoa/d2b/blob/ed38e5e5b1fbb6268cf72265a17cbf6fca1d5f84/labs/venus-vulkan-video/pkgs/spectrum-ch/default.nix),
 along with the
@@ -50,8 +50,8 @@ and
 
 The obvious question is why not run [crosvm](https://crosvm.dev/) as the VMM,
 since it already has all of this. The answer is that the wider project this lab
-belongs to has requirements crosvm does not serve. The one that decided it was
-software TPM. Cloud Hypervisor takes
+belongs to has requirements crosvm does not serve. The one that decided it was a
+software Trusted Platform Module. Cloud Hypervisor takes
 [`--tpm socket=<path>`](https://github.com/vicondoa/d2b/blob/ed38e5e5b1fbb6268cf72265a17cbf6fca1d5f84/nixos-modules/components/tpm.nix#L13-L27)
 and speaks to an ordinary [swtpm](https://github.com/stefanberger/swtpm) on the
 other end. crosvm's TPM backend is `vtpm_proxy`, compiled behind a `vtpm`
@@ -97,8 +97,8 @@ That much gets page rendering onto the GPU. Video still decoded in software.
 Firefox's Vulkan Video decoder hard-gates in
 `SelectVulkanDecoderPhysicalDevice()` on two extensions being present,
 `VK_KHR_video_queue` and `VK_KHR_video_decode_queue`. Venus advertised neither,
-so Firefox fell through to VA-API and then to software. Below the browser,
-nothing existed at any layer:
+so Firefox fell through to VA-API, the Video Acceleration API, and then to
+software. Below the browser, nothing existed at any layer:
 
 | Layer                   | State before this work                                                        |
 | ----------------------- | ----------------------------------------------------------------------------- |
@@ -124,7 +124,7 @@ which is what you want in the middle of a protocol you are extending.
 
 ## Why Vulkan Video and not VA-API
 
-VA-API, the Video Acceleration API, is what Firefox looks for first on Linux,
+VA-API is what Firefox looks for first on Linux,
 and `nvidia-vaapi-driver` provides it on NVIDIA by translating to NVDEC.
 virglrenderer already has VA-API video support and is even built with it. It
 cannot work, for a reason in the wire format rather than in anyone's code.
@@ -200,9 +200,9 @@ real reference.
 
 **The wire protocol.** Venus command IDs are explicitly assigned in
 `VK_EXT_command_serialization.xml` rather than derived from position, and
-`VN_WIRE_FORMAT_VERSION` must not change, because Venus requires exact guest and
+the wire format version must not change, because Venus requires exact guest and
 renderer equality. At the base revision 345 command types were assigned; the
-thirteen H.264 commands append at 346 through 358 and no existing value moves.
+thirteen video commands append at 346 through 358 and no existing value moves.
 The commits are
 [protocol list](https://github.com/vicondoa/venus-protocol-vulkan-video/commit/956d64c4c3dbe23ab3f8142048252f9b33cd3621),
 [StdVideo definitions and flag packing](https://github.com/vicondoa/venus-protocol-vulkan-video/commit/60f3e3e7d920ff035bb33ea4372196d76a3bda25),
@@ -225,26 +225,27 @@ command-buffer entrypoints in `vn_command_buffer.c`:
 `vn_CmdBeginVideoCodingKHR()`, `vn_CmdEndVideoCodingKHR()`,
 `vn_CmdControlVideoCodingKHR()`, and `vn_CmdDecodeVideoKHR()`. Exposure is
 conditional on the renderer, so the extension bits are set only alongside a
-`renderer_extensions.KHR_video_queue` check, and `VkQueueFamilyVideoPropertiesKHR`
-is chained into the queue family query so a guest sees per-family codec
-operations rather than a video queue that decodes nothing. Decode only, H.264
-only, no encode.
+`renderer_extensions.KHR_video_queue` check, and
+`VkQueueFamilyVideoPropertiesKHR` is chained into the queue family query so a
+guest sees per-family codec operations rather than a video queue that decodes
+nothing. Decode only, H.264 only, no encode.
 
 **The host renderer.** virglrenderer gets
 [`src/venus/vkr_video.c`](https://github.com/vicondoa/virglrenderer-venus-vulkan-video/blob/add87c05362359bf4d82067f2e9e37cd8705dc63/src/venus/vkr_video.c),
 about 540 lines, plus `vkr_video_validate.h`, `vkr_video_reject.h`, and
 `vkr_video_scrub.h`. Those validate the decode scope, the DPB slots, the
 capabilities, and the command sequence on the way in, and scrub reply payloads
-on the way out. The DPB is the Decoded Picture Buffer, the set of already-decoded
-frames the codec may reference when decoding the next one, and a guest that can
-name slots outside it can make the host read memory it should not.
+on the way out. The DPB is the Decoded Picture Buffer, the set of
+already-decoded frames the codec may reference when decoding the next one, and a
+guest that can name slots outside it can make the host read memory it should
+not.
 [Scrubbing the video format query reply flags](https://github.com/vicondoa/virglrenderer-venus-vulkan-video/commit/a5e86c4cd7fd946f4a9d96db1bb718f88c683054)
 and
 [zeroing output pNext payloads on the format-query reject](https://github.com/vicondoa/virglrenderer-venus-vulkan-video/commit/c44f6e50a6b002c65f566367e9961e0c02ad6173)
 both exist to avoid leaking host state back to the guest on a failed path.
 
-With those three in place `vkCmdDecodeVideoKHR` fired, sessions were created, and
-the host NVDEC engine showed activity.
+With those three in place `vkCmdDecodeVideoKHR` fired, sessions were created,
+and the host NVDEC engine showed activity.
 
 ## The green frame
 
@@ -270,8 +271,9 @@ Two separate images breaks decode, and disjoint planes via
 `VK_IMAGE_CREATE_DISJOINT_BIT` would work but appear nowhere in ffmpeg's
 `hwcontext_vulkan.c`, and changing the client is the thing I am refusing to do.
 
-Firefox imports the two planes separately, one EGL image each, which is the
-portable approach that works on every native driver. Its log reports both
+Firefox imports the two planes separately, one EGL image each, EGL being the
+interface a driver uses to import buffers. That is the portable approach that
+works on every native driver. Its log reports both
 imports succeeding with every field correct. The two file descriptors refer to
 regions of one buffer, so in the guest they resolve to the same GEM handle, the
 kernel's process-local integer naming one buffer object. Four defects sat
@@ -308,13 +310,15 @@ letting a wider one through.
 virglrenderer already had per-plane images and already selected them by index in
 `vrend_create_sampler_view()`, and nothing connected the two halves. Upstream
 only builds those images from a `gbm_bo`, and crosvm initialises virglrenderer
-with surfaceless EGL and no GBM device, so `egl->gbm` is NULL and
+with surfaceless EGL and no GBM (Generic Buffer Management) device, so
+`egl->gbm` is NULL and
 `virgl_egl_aux_plane_image_from_gbm_bo()` cannot serve here at all. The
 replacement
 [imports the plane straight from the DMA-BUF](https://github.com/vicondoa/virglrenderer-venus-vulkan-video/blob/add87c05362359bf4d82067f2e9e37cd8705dc63/src/vrend/vrend_renderer.c#L13604-L13633)
 with the per-plane stride and offset the guest sent.
 
-That last one had two problems stacked behind it. The fourcc has to be one the
+That last one had two problems stacked behind it. The fourcc, the four-character
+code naming a pixel format, has to be one the
 driver accepts, and a two-channel 8-bit plane has two DRM spellings differing
 only in which byte is named first. Querying this host's EGL returned `RG88=1`
 and `GR88=0`, so importing chroma as `GR88`, the semantically correct spelling,
@@ -367,11 +371,11 @@ I want to be honest about how good that is. Before this, the lab set
 `gfx.blacklist.hardwarevideodecoding` to `1` to skip the probe outright, which
 was a lie told to the browser. That pref is gone and Firefox reaches its own
 conclusion from what the driver reports. But the guest's VA-API decode is
-hollow, so the position moved from asserting a capability the guest does not have
-to relying on one the guest advertises but has not been shown to possess. The
-residual risk is narrow and real: if Firefox ever ordered VA-API ahead of Vulkan,
-it would be selecting on an advertisement I have measured against. It does not do
-that today.
+hollow, so the position moved from asserting a capability the guest does not
+have to relying on one the guest advertises but has not been shown to possess.
+The residual risk is narrow and real: if Firefox ever ordered VA-API ahead of
+Vulkan, it would be selecting on an advertisement I have measured against. It
+does not do that today.
 
 ## Four other things that had to be true
 
@@ -382,10 +386,10 @@ decision. Removing the flag returns 1820 `CmdSubmit3d` refusals.
 
 ffmpeg 8 has to be explicitly on `LD_LIBRARY_PATH`. ffmpeg 7's
 `vulkan_map_to_drm()` waits on a number of semaphores equal to the plane count
-while the `f->sem[]` array it reads them from is sized by image count, so an NV12
-frame's `sem[1]` is `VK_NULL_HANDLE` and the wait faults. Firefox already prefers
-`libavcodec.so.62` when it can find it, and the nixpkgs wrapper hardcodes
-`ffmpeg_7`, so `.62` was never on the path.
+while the `f->sem[]` array it reads them from is sized by image count, so an
+NV12 frame's `sem[1]` is `VK_NULL_HANDLE` and the wait faults. Firefox already
+prefers `libavcodec.so.62` when it can find it, and the nixpkgs wrapper
+hardcodes `ffmpeg_7`, so `.62` was never on the path.
 
 Venus's `vn_GetMemoryFdKHR()` needs a null guard. Exporting memory allocated
 without an export handle type dereferenced NULL in the guest ICD, which a debug
@@ -416,14 +420,14 @@ driver. NV12 offers exactly one modifier there, `LINEAR`, and it comes without
 `VIDEO_DECODE_OUTPUT`.
 
 Teaching the blit to find the later plane is the first idea anybody has, since
-the copy path is only broken because it cannot reach the per-plane image. It does
-not work, and the reason is the interesting part: with zero copy off, the guest
-never imports the chroma plane as a separate resource at all. That run produced
-6482 `plane=0` imports and zero `plane=1` imports, so plane-index inference
-correctly returns `-1` and the blit fails for the original reason. Fixing the
-copy path means changing what gets imported rather than what the blit looks up.
-That is the one loose end I would most like to close, because it would remove
-the dependency on zero copy and therefore on the VA-API probe.
+the copy path is only broken because it cannot reach the per-plane image. It
+does not work, and the reason is the interesting part: with zero copy off, the
+guest never imports the chroma plane as a separate resource at all. That run
+produced 6482 `plane=0` imports and zero `plane=1` imports, so plane-index
+inference correctly returns `-1` and the blit fails for the original reason.
+Fixing the copy path means changing what gets imported rather than what the blit
+looks up. That is the one loose end I would most like to close, because it would
+remove the dependency on zero copy and therefore on the VA-API probe.
 
 ## Where it landed
 
@@ -445,20 +449,20 @@ YouTube works, including its adaptive bitrate ladder: playback switched from
 854x480 to 1280x720 mid-stream and the decode path rebuilt the decoder for the
 new resolution without a new failure. That result comes with a permanent pin
 attached. WebM is disabled by policy in the guest, so YouTube serves H.264 in
-MP4, which is the only codec Venus carries today. No NVIDIA driver implements
-`VK_KHR_video_decode_vp9`, and Turing, the generation this T1000 belongs to, has
-no AV1 decode engine at all.
+MP4, which is the only codec Venus carries today. The driver here does ship
+`VK_KHR_video_decode_vp9`, so VP9 is deferred rather than blocked, but Turing,
+the generation this T1000 belongs to, has no AV1 decode engine at all.
 
-Firefox's fallback to software is completely silent, so "the video played" proves
-nothing. `decode_cmds` is the number that carries the claim, because a negative
-control with the Vulkan decoder disabled establishes that it reads 0. Reading the
-NVDEC percentage needs the same care: about 3% is what 720p30 costs in real time
-on a T1000, and the contrast is what carries it, since a software-decoding
-Firefox reads a flat 0 on every sample while the same clip decoded as fast as
-possible reads 98% against 99% host-native.
+Firefox's fallback to software is completely silent, so "the video played"
+proves nothing. `decode_cmds` is the number that carries the claim, because a
+negative control with the Vulkan decoder disabled establishes that it reads 0.
+Reading the NVDEC percentage needs the same care: about 3% is what 720p30 costs
+in real time on a T1000, and the contrast is what carries it, since a
+software-decoding Firefox reads a flat 0 on every sample while the same clip
+decoded as fast as possible reads 98% against 99% host-native.
 
-I am not publishing a frame-drop figure, because I do not have an honest one. The
-numbers I have were taken with seven other VMs and several `rustc` jobs
+I am not publishing a frame-drop figure, because I do not have an honest one.
+The numbers I have were taken with seven other VMs and several `rustc` jobs
 saturating the host. Whether 720p is clean on a quiet machine is unmeasured.
 
 ## This is a prototype
@@ -475,6 +479,6 @@ failed.
 
 None of it is upstream, none of it has been reviewed by anyone who maintains
 these projects, and the security-relevant parts, meaning the validation and
-scrubbing around a wire format a guest controls, have had exactly one set of eyes
-on them. The forks are structured to be rebaseable and upstreamable because that
-is where this should go, and it has not gone there yet.
+scrubbing around a wire format a guest controls, have had exactly one set of
+eyes on them. The forks are structured to be rebaseable and upstreamable because
+that is where this should go, and it has not gone there yet.
