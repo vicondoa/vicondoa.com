@@ -78,9 +78,6 @@ Use `draft: true` while working. Drafts appear in the local development server
 but are excluded from production pages, topic archives, RSS, and the sitemap.
 Run `pnpm check` before publishing; invalid metadata fails the build.
 
-The starter post at `src/content/blog/start-here.mdx` demonstrates prose, code,
-images, topics, and an MDX component. Replace it with the first real post.
-
 ## Publishing
 
 GitHub Actions runs formatting, Astro/content checks, a production build, and
