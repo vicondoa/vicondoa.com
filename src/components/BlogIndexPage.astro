@@ -14,12 +14,12 @@ interface Props {
 
 const { basePath, currentPage, posts, totalPages } = Astro.props;
 const isFirstPage = currentPage === 1;
-const title = isFirstPage ? SITE.title : `Archive — Page ${currentPage}`;
+const title = isFirstPage ? SITE.title : `Archive, page ${currentPage}`;
 ---
 
 <BaseLayout
   title={title}
-  description="Essays, experiments, histories, and notes—organized mostly by curiosity."
+  description="Essays, experiments, histories, and notes, organized mostly by curiosity."
 >
   {
     isFirstPage ? (

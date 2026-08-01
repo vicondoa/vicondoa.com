@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
   <title id="title">John Vicondoa</title>
-  <desc id="desc">Tech, AI, and special interests—straight from the underground (basement).</desc>
+  <desc id="desc">Coding, AI, and other special interests straight from my lair.</desc>
   <defs>
     <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#090b10"/>
@@ -29,7 +29,7 @@
   <path d="M0 518h118l41-72 53 135 61-202 60 185 48-118 45 92 55-166 58 188 53-112 58 81 50-151 59 183 58-110 65 97 56-137 61 180 57-85 59 80h104" fill="none" stroke="url(#signal)" stroke-linecap="round" stroke-linejoin="round" stroke-width="7" filter="url(#glow)"/>
   <text x="78" y="102" fill="#72edf8" font-family="monospace" font-size="20" font-weight="700" letter-spacing="5">PERSONAL LOG / OPEN FREQUENCY</text>
   <text x="78" y="246" fill="#edf1f7" font-family="sans-serif" font-size="82" font-weight="700" letter-spacing="-3">John Vicondoa</text>
-  <text x="82" y="316" fill="#9ba4b3" font-family="sans-serif" font-size="30">Tech, AI, and special interests—straight from</text>
-  <text x="82" y="359" fill="#9ba4b3" font-family="sans-serif" font-size="30">the underground (basement).</text>
+  <text x="82" y="316" fill="#9ba4b3" font-family="sans-serif" font-size="30">Coding, AI, and other special interests</text>
+  <text x="82" y="359" fill="#9ba4b3" font-family="sans-serif" font-size="30">straight from my lair.</text>
   <text x="82" y="565" fill="#edf1f7" font-family="monospace" font-size="22" letter-spacing="3">VICONDOA.COM</text>
 </svg>

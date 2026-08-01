@@ -33,7 +33,7 @@ const {
 
 const pageTitle =
   title === SITE.title
-    ? `${SITE.title} — ${SITE.tagline}`
+    ? `${SITE.title} | ${SITE.tagline}`
     : `${title} | ${SITE.title}`;
 const canonicalUrl = new URL(canonical ?? Astro.url.pathname, SITE.url);
 const imageUrl = new URL(image, SITE.url);

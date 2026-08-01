@@ -1,6 +1,6 @@
 ---
 title: 'My Thoughts on Vibe Coding'
-description: 'I have been coding since I was a teenager. That experience helped me get my first technology job at a dot-com when I was 18.'
+description: 'I love software engineering. I have been coding since I was 15 and got my first tech job at 18. I have never been more excited about my special interest, even while it is going through a radical change, and here is why.'
 publishedAt: 2026-07-31
 topics:
   - AI
@@ -59,12 +59,17 @@ back when my experience tells me there is probably another path. When an
 implementation comes back, I can look for the same problems I would expect from
 a junior developer or from a project that grew too quickly.
 
-I can look for poor naming, unclear abstractions, weak boundaries, unnecessary
-complexity, slow builds, unreliable tests, duplicated patterns, and designs that
-will become increasingly difficult to extend. I can recognize the point where a
-project starts fighting every new feature. I can see when a shortcut is about to
-multiply into dozens of bugs. All of those inputs help me become a better
-manager for my coding agents.
+I can look for obvious security holes, poor naming, unclear abstractions, weak
+boundaries, unnecessary complexity, slow builds, unreliable tests, duplicated
+patterns, and designs that will become increasingly difficult to extend. I watch
+for code that cannot be tested because of the way it was designed, and for
+functionality that duplicates something that already exists somewhere else in
+the project. I can recognize the point where a project starts fighting every new
+feature. I can see when a shortcut is about to multiply into dozens of bugs.
+
+None of these signals are new. Slop always looked like slop, AI or not. I am
+applying the same judgment I have applied for my entire career, and all of those
+inputs help me become a better manager for my coding agents.
 
 ## The Fundamentals Still Matter
 

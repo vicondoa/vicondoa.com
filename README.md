@@ -25,16 +25,31 @@ The site will be available at `http://localhost:4321`.
 
 ## Commands
 
-| Command             | Purpose                                            |
-| ------------------- | -------------------------------------------------- |
-| `pnpm dev`          | Start the local authoring server                   |
-| `pnpm build`        | Generate the production site in `dist/`            |
-| `pnpm preview`      | Serve the generated production site                |
-| `pnpm check`        | Validate Astro, TypeScript, and content schemas    |
-| `pnpm format`       | Format source files                                |
-| `pnpm format:check` | Check formatting without changing files            |
-| `pnpm test:e2e`     | Build and run Playwright smoke/accessibility tests |
-| `pnpm test`         | Run all repository quality gates                   |
+`make check` is the gate to run before pushing. It runs the Prettier check, the
+em dash and en dash lint, the Astro and content type check, a production build,
+and validation of the build output.
+
+```sh
+make check
+```
+
+| Command             | Purpose                                             |
+| ------------------- | --------------------------------------------------- |
+| `make check`        | Required before pushing: lint, types, build, verify |
+| `make lint`         | Prettier check plus the dash lint                   |
+| `make test`         | Build and run Playwright smoke/accessibility tests  |
+| `make help`         | List every target                                   |
+| `pnpm dev`          | Start the local authoring server                    |
+| `pnpm build`        | Generate the production site in `dist/`             |
+| `pnpm preview`      | Serve the generated production site                 |
+| `pnpm check`        | Validate Astro, TypeScript, and content schemas     |
+| `pnpm format`       | Format source files                                 |
+| `pnpm format:check` | Check formatting without changing files             |
+| `pnpm test:e2e`     | Build and run Playwright smoke/accessibility tests  |
+| `pnpm test`         | Run all repository quality gates                    |
+
+Writing conventions for this repository, including the ASCII and no-em-dash
+rules that `make lint` enforces, are in [AGENTS.md](AGENTS.md).
 
 Playwright needs Chromium once on a new development machine:
 
