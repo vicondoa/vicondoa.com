@@ -2,6 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 import { getPageCount, getPostsPage } from '../src/lib/pagination';
+import { SITE } from '../src/site.config';
 
 const githubUrl = 'https://github.com/vicondoa';
 
@@ -43,12 +44,7 @@ test('site navigation and GitHub profile links are present', async ({
   await expect(page.getByText('Writing', { exact: true })).toHaveCount(0);
   await expect(page.locator(`a[href="${githubUrl}"]`)).toHaveCount(2);
   await expect(page.getByText('John Vicondoa', { exact: true })).toHaveCount(1);
-  await expect(
-    page.getByText(
-      'Coding, AI, and other special interests straight from my lair.',
-      { exact: true },
-    ),
-  ).toHaveCount(1);
+  await expect(page.getByText(SITE.tagline, { exact: true })).toHaveCount(1);
   await expect(page.locator('.blog-hero')).toHaveCount(0);
 
   await page
