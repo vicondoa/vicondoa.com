@@ -63,11 +63,24 @@ On NixOS, use the packaged Chromium binary instead:
 PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH="$(command -v chromium)" pnpm test:e2e
 ```
 
+## Previewing a pull request
+
+Cloudflare Pages builds every branch and serves the result from a preview URL,
+and that build is the same one production gets. There is no draft mode and
+nothing is held back, so a post under review can be read at its real URL before
+it merges. Cloudflare posts the branch and commit preview links on the pull
+request.
+
 ## Writing a post
 
-Create a `.md` or `.mdx` file under `src/content/blog/`. The file path becomes
-the URL below `/blog/`; for example, `local-history/old-depot.mdx` becomes
-`/blog/local-history/old-depot`.
+Create a `.md` or `.mdx` file under `src/content/blog/YYYY/MM/`, where the
+directories match the post's `publishedAt` date in UTC. The file name becomes
+the last URL segment; for example, `src/content/blog/2026/07/old-depot.md`
+published in July 2026 becomes `/blog/2026/07/old-depot`.
+
+The URL is built from `publishedAt` rather than from the file path, so the two
+cannot drift apart silently. `make check` fails if a post sits in a directory
+that does not match its own publish date.
 
 Every post begins with validated frontmatter:
 
@@ -80,7 +93,6 @@ updatedAt: 2026-07-25 # optional
 topics:
   - Programming
   - Local history
-draft: false
 canonical: https://example.com/original-post # optional
 ---
 ```
@@ -89,16 +101,15 @@ Optional local cover images can be referenced with `cover`. When a cover is
 present, `coverAlt` is required. Shared static images can go in
 `public/images/`.
 
-Use `draft: true` while working. Drafts appear in the local development server
-but are excluded from production pages, topic archives, RSS, and the sitemap.
-Run `pnpm check` before publishing; invalid metadata fails the build.
+Frontmatter is strict, so an unrecognized key fails the build rather than being
+ignored. Run `make check` before publishing; invalid metadata fails the build.
 
 ## Publishing
 
 GitHub Actions runs formatting, Astro/content checks, a production build, and
 browser smoke/accessibility tests on pull requests and `main`. CI jobs are
-restricted to runs initiated by the repository owner; outside fork pull
-requests cannot execute repository workflows.
+restricted to runs initiated by the repository owner; outside fork pull requests
+cannot execute repository workflows.
 
 Cloudflare Pages uses direct Git integration:
 
@@ -142,6 +153,6 @@ outside pull requests cannot run CI and will not be merged.
 ## Licensing
 
 Site software is licensed under the [MIT License](LICENSE). Written posts,
-original media, branding, and other editorial content are not covered by the
-MIT license and remain all rights reserved; see
+original media, branding, and other editorial content are not covered by the MIT
+license and remain all rights reserved; see
 [CONTENT-LICENSE.md](CONTENT-LICENSE.md).

@@ -1,19 +1,22 @@
 ---
 title: 'My Thoughts on Vibe Coding'
-description: 'I love software engineering. I have been coding since I was 15 and got my first tech job at 18. I have never been more excited about my special interest, even while it is going through a radical change, and here is why.'
+description:
+  'I love software engineering. I have been coding since I was 15 and got my
+  first tech job at 18. I have never been more excited about my special
+  interest, even while it is going through a radical change, and here is why.'
 publishedAt: 2026-07-31
 topics:
   - AI
   - Programming
   - Meta
-draft: false
 ---
 
 I have always viewed software development, architecture, and engineering in
 general as forms of art. Software is an expression of my creativity. I love the
 physical act of writing code. I love debugging through layers I do not
 understand yet and following a problem further down the stack. Today, I can
-explore levels of a system that I could only have dreamed of reaching when I was 18.
+explore levels of a system that I could only have dreamed of reaching when I
+was 18.
 
 For most of my career, I have told myself that software development was going to
 be a lot of fun and that I could make a good living doing it. I also believed

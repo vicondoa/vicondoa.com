@@ -24,9 +24,9 @@ const blog = defineCollection({
           ]),
         cover: image().optional(),
         coverAlt: z.string().trim().min(1).max(180).optional(),
-        draft: z.boolean().default(false),
         canonical: z.url().optional(),
       })
+      .strict()
       .refine((data) => !data.cover || Boolean(data.coverAlt), {
         message: 'coverAlt is required when cover is set',
         path: ['coverAlt'],

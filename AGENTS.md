@@ -1,29 +1,28 @@
 # AGENTS.md
 
-Guidance for AI agents working on vicondoa.com. These rules apply to blog
-posts, page copy, commit messages, pull request descriptions, and any other
-prose written for this repository.
+Guidance for AI agents working on vicondoa.com. These rules apply to blog posts,
+page copy, commit messages, pull request descriptions, and any other prose
+written for this repository.
 
 ## Voice
 
 Always use my language. When I supply a draft, notes, or source text, keep my
 wording, my phrasing, and my sentence structure. Fix grammar, tighten obvious
-redundancy, and organize the material, but do not rewrite my sentences into
-your own voice. If a passage is unclear, ask instead of inventing a
-replacement. Do not add ideas, opinions, examples, or conclusions that I did
-not provide.
+redundancy, and organize the material, but do not rewrite my sentences into your
+own voice. If a passage is unclear, ask instead of inventing a replacement. Do
+not add ideas, opinions, examples, or conclusions that I did not provide.
 
 ## Characters
 
-Write ASCII only. Use a plain hyphen, straight quotes, and three periods
-instead of typographic punctuation.
+Write ASCII only. Use a plain hyphen, straight quotes, and three periods instead
+of typographic punctuation.
 
 Never use an em-dash. Restructure the sentence, or use a comma, a colon, or a
-period instead. The same applies to en-dashes, curly quotes, curly
-apostrophes, and ellipsis characters.
+period instead. The same applies to en-dashes, curly quotes, curly apostrophes,
+and ellipsis characters.
 
-Non-ASCII characters are acceptable only when there is genuinely no other way
-to express something, such as a quoted proper name, a required code sample, a
+Non-ASCII characters are acceptable only when there is genuinely no other way to
+express something, such as a quoted proper name, a required code sample, a
 technical symbol with no ASCII equivalent, or a decorative glyph in the site
 chrome. Prose never qualifies. Dashes never qualify, and `make lint-dashes`
 enforces that.
@@ -46,16 +45,16 @@ Do not use these constructions. They read as machine-generated.
 - Filler intensifiers such as "truly", "deeply", "incredibly", "seamlessly",
   "game-changing", "revolutionary", "unlock", "leverage" as a verb, "delve",
   "dive into", "landscape", "realm", "tapestry", and "at the end of the day".
-- Bulleted lists where prose would work. Reserve lists for genuinely
-  enumerable items.
+- Bulleted lists where prose would work. Reserve lists for genuinely enumerable
+  items.
 - Emoji, and headings decorated with symbols.
 - Hedging pileups such as "it's worth noting that" and "it's important to
   remember that".
 
 ## Structure
 
-Prefer paragraphs over lists and fragments. A paragraph should carry a
-complete thought and usually runs three to six sentences.
+Prefer paragraphs over lists and fragments. A paragraph should carry a complete
+thought and usually runs three to six sentences.
 
 Use sentence case for headings. Keep heading levels flat, starting at `##`
 inside a post, because the page supplies the `h1`.
@@ -72,17 +71,39 @@ Post frontmatter is validated by `src/content.config.ts`. The `description`
 field appears on post cards, RSS, and social metadata, so write it as a real
 sentence rather than a label.
 
+Post files live under `src/content/blog/YYYY/MM/`, matching the `publishedAt`
+date in UTC. `make check` fails if a post sits in the wrong month.
+
+There is no draft mode. Every post in the repository is published, and a pull
+request builds and deploys the whole site to a Cloudflare preview URL, so a post
+in review is read at its real URL on a real deployment. Keep unfinished writing
+out of the repository until it is ready to ship. Post frontmatter is strict, so
+a stray `draft: true` fails the type check instead of quietly hiding a post.
+
+## Linking to code
+
+When a post explains how something was built, link to the code that does it.
+
+Always link by full 40-character commit SHA. Never link to a branch, a tag, or a
+default branch path, because those move and the post then describes code that is
+no longer there. Use `/blob/<sha>/path` for a file and add `#L10-L25` to point
+at the specific lines under discussion.
+
+Read the source comments before writing the explanation. Repositories worth
+linking to tend to explain their own reasoning, including the approaches that
+were discarded, and that reasoning is usually better than a summary written from
+the diff alone.
+
 ## Before pushing
 
 `make check` is required before every push. It runs the Prettier check, the em
-dash and en dash lint, the Astro and content type check, a production build,
-and validation of the build output. Do not push, open a pull request, or ask
-for review until it passes.
+dash and en dash lint, the post date-path lint, the Astro and content type
+check, a production build, and validation of the build output. Do not push, open
+a pull request, or ask for review until it passes.
 
 ```sh
 make check
 ```
 
-Run `make test` for the Playwright smoke and accessibility suite when the
-change touches markup, routing, or navigation. Run `make help` to see every
-target.
+Run `make test` for the Playwright smoke and accessibility suite when the change
+touches markup, routing, or navigation. Run `make help` to see every target.

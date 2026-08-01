@@ -4,7 +4,7 @@ import { getPostUrl, getPublishedPosts } from '../lib/blog';
 import { SITE } from '../site.config';
 
 export async function GET(context: { site?: URL }) {
-  const posts = await getPublishedPosts({ includeDrafts: false });
+  const posts = await getPublishedPosts();
 
   return rss({
     title: SITE.title,
